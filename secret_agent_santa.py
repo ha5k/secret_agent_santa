@@ -1,6 +1,12 @@
 import pandas as pd
 import smtplib
 import ssl
+import pickle
+
+with open('test.pkl', 'rb') as file:
+    vars = pickle.load(file)
+port = vars[0]
+password = vars[1]
 
 
 smtp_server = "smtp.gmail.com"
