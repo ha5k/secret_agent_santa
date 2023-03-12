@@ -2,6 +2,7 @@ import pandas as pd
 import smtplib
 import ssl
 import pickle
+import sas_utils
 
 with open('test.pkl', 'rb') as file:
     vars = pickle.load(file)
@@ -21,3 +22,8 @@ context = ssl.create_default_context()
 with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
     server.login(sender_email, password)
     server.sendmail(sender_email, receiver_email, message)
+
+
+
+target = 'https://docs.google.com/spreadsheets/d/1FTQo7Int8YRHdBe6-QRKzJ0dr1uU3SZLaHRypyWudiY/edit#gid=1372196122'
+df = sas_utils.read_proposals(target)
