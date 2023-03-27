@@ -37,10 +37,18 @@ def shuffle_tasks(df):
 
     return (task_list)
 
+def load_pickles():
+    with open('family_details.pkl', 'r') as f:
+        family = pickle.load(f)
+    with open('form_details.pkl', 'r') as f:
+        forms = pickle.load(f)
+    with open('facilitator_details.pkl', 'r') as f:
+        facilitator = pickle.load(f)
+    return family, forms, facilitator
 
 
 ### OLD  CODE
-
+'''
 import pandas as pd
 import smtplib
 import ssl
@@ -70,3 +78,4 @@ with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
 
 target = 'https://docs.google.com/spreadsheets/d/1FTQo7Int8YRHdBe6-QRKzJ0dr1uU3SZLaHRypyWudiY/edit#gid=1372196122'
 df = sas_utils.read_proposals(target)
+'''
