@@ -1,4 +1,5 @@
 import pandas as pd
+import pickle
 
 def read_form(url_in):
     url_use = url_in.replace('/edit#gid=', '/export?format=csv&gid=')
@@ -38,11 +39,11 @@ def shuffle_tasks(df):
     return (task_list)
 
 def load_pickles():
-    with open('family_details.pkl', 'r') as f:
+    with open('family_details.pkl', 'rb') as f:
         family = pickle.load(f)
-    with open('form_details.pkl', 'r') as f:
+    with open('form_details.pkl', 'rb') as f:
         forms = pickle.load(f)
-    with open('facilitator_details.pkl', 'r') as f:
+    with open('facilitator_details.pkl', 'rb') as f:
         facilitator = pickle.load(f)
     return family, forms, facilitator
 
@@ -90,8 +91,8 @@ import sas_utils
 
 with open('test.pkl', 'rb') as file:
     vars = pickle.load(file)
-port = vars[0]
-password = vars[1]
+port = 456 #vars[0]
+password = 'cjwxiygatylotgfe'  #vars[1]
 
 
 smtp_server = "smtp.gmail.com"
