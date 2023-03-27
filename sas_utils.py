@@ -46,6 +46,39 @@ def load_pickles():
         facilitator = pickle.load(f)
     return family, forms, facilitator
 
+def too_few_responses(submissions, form_to_send, family, facilitator):
+
+    send_reminder = input('You want me to send a reminder email? (y/n)')
+    if send_reminder == 'y':
+        responder_names = submissions['Who Are You?'].tolist()
+
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(facilitator['email'], facilitator['pwd'])
+
+            for member in family:
+                if responder_names.count(member) <= 0:
+                    message = '\n\n'.join([
+                        f'Hey there {member}',
+                        "It looks like like you haven't submitted tasks for Secret Agent Santa.",
+                        "You wouldn't want to be put on the naughty list, would you?",
+                        f'Please submit your tasks here:\n{form_to_send}',
+                        "If you have any questions, get in touch with Eamonn! He can help!",
+                        "Please advise,\nYour Secret Agent Santa Bot"
+                    ])
+                    server.sendmail(faciliator['email'], family[member]['email'], message)
+
+def too_many_responses(submissions, family):
+    responder_names = submissions['Who Are You?'].tolist()
+    for member in family:
+        if responder_names.count(member) >= 1:
+            print(f'\t{member} is duplicated')
+
+    cont = input('Want to continue with the most recent submissions? (y/n)')
+    if cont == 'y':
+        submissions.drop_duplicates(subset = 'Who Are You?', keep = 'last', inplace = True)
+
+    return submissions
 
 ### OLD  CODE
 '''

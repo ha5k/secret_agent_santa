@@ -16,27 +16,7 @@ good_to_go = True
 if len(submissions.drop_duplicates(subset = 'Who Are You?')) < responses_expected:
     print("You're missing responses from someone in the family")
     good_to_go = False
-    send_reminder = input('You want me to send a reminder email? (y/n)')
-
-    if send_reminder == 'y':
-        responder_names = submissions['Who Are You?'].tolist()
-
-        with smtplib.SMTP(smtp_server, smtp_port) as server:
-            server.starttls()
-            server.login(facilitator['email'], facilitator['pwd'])
-
-
-            for member in family:
-                if responder_names.count(member) <= 0:
-                    message = '\n\n'.join([
-                        f'Hey there {member}',
-                        "It looks like like you haven't submitted tasks for Secret Agent Santa.",
-                        "You wouldn't want to be put on the naughty list, would you?",
-                        f'Please submit your tasks here:\n{forms[submit_tasks][0]}',
-                        "If you have any questions, get in touch with Eamonn! He can help!",
-                        "Please advise,\nYour Secret Agent Santa Bot"
-                    ])
-                    server.sendmail(faciliator['email'], family[member]['email'], message)
+    sas_utils.too_few_responses(submissions, forms['submit_tasks'][0], family, facilitator)
 
 if len(submissions) > responses_expected:
     print('You have too many responses. Time to panic!')
@@ -44,16 +24,9 @@ if len(submissions) > responses_expected:
     print('Follow up to make sure their most recent submission is the one they want to use')
     good_to_go = False
 
-    responder_names = submissions['Who Are You?'].tolist()
-    for member in family:
-        if responder_names.count(member) >= 1:
-            print(f'\t{member} is duplicated')
-
-    cont = input('Want to continue with the most recent submissions? (y/n)')
-    if cont == 'y':
-        submissions.drop_duplicates(subset = 'Who Are You?', keep = 'last', inplace = True)
-        if len(submissions) == responses_expected:
-            good_to_go = True
+    submissions = sas_utils.too_many_responses(submissions, family)
+    if len(submissions) == responses_expected:
+        good_to_go = True
 
 
 
@@ -88,7 +61,7 @@ if good_to_go:
             message = '\n'.join([
                 f"Greetings, {row[1]['Who Are You?']}\n",
                 "It's time for you to select your Secret Agent Santa task. The Secret Agent will receive your selection as one of their tasks.\n",
-                "Remember, for the task to count, YOU have to do whatever task you select. So choose wisely.\n",
+                "Remember, for the task to count, YOU have to do whatever task you select. Choose wisely.\n",
                 "The tasks you can choose from are:",
                 f"\tTask A: {row[1].st1}",
                 f"\tTask B: {row[1].st2}",
