@@ -9,13 +9,13 @@ import sas_utils
 family, forms, facilitator = sas_utils.load_pickles()
 
 ## SEND LINK TO SUBMIT TASKS
-print('foo')
+print('Opening Email Connection...')
 with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
-    print('hey')
+    print('Connection Opened!')
     server.starttls()
     server.login(facilitator['email'], facilitator['pwd'])
     for member in family:
-        print('member')
+        print('Working on:',member)
         message = '\n\n'.join([f'Subject: Secret Santa',
                                f'Hi {member}',
                                f'Please submit three tasks for the 2023 Edition of Secret Agent Santa at the following link:',
