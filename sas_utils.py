@@ -91,8 +91,8 @@ import sas_utils
 
 with open('test.pkl', 'rb') as file:
     vars = pickle.load(file)
-port = 456 #vars[0]
-password = 'cjwxiygatylotgfe'  #vars[1]
+port = vars[0]
+password = vars[1]
 
 
 smtp_server = "smtp.gmail.com"
