@@ -19,10 +19,10 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         message = '\n\n'.join([f'Subject: Secret Santa',
                                f'Hi {member}',
                                f'Please submit three tasks for the 2023 Edition of Secret Agent Santa at the following link:',
-                               forms[submit_tasks][0],
+                               forms['submit_tasks'][0],
                                'Cheers,\nYour Secret Agent Santa Bot'
                                ])
-        server.sendmail(facilitator['email'], family[member]['email'], message)
+        server.sendmail(facilitator['email'], family[member][0], message)
 
 
 
