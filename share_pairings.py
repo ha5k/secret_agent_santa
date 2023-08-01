@@ -3,7 +3,7 @@ import smtplib
 import pickle
 import numpy as np
 
-reponses_expected = 8 #number of people you were expecting to have responded
+reponses_expected = 4 #number of people you were expecting to have responded
 
 ## LOAD IN FAMILY AND FORM INFORMATION, THEN READ IN RESPONSES
 

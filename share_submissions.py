@@ -2,8 +2,10 @@ import pandas as pd
 import smtplib
 import pickle
 import numpy as np
+import sas_utils
+from random import shuffle
 
-reponses_expected = 8 #number of people you were expecting to have responded
+responses_expected = 4 #number of people you were expecting to have responded
 
 ## LOAD IN FAMILY AND FORM INFORMATION, THEN READ IN RESPONSES
 
@@ -35,10 +37,15 @@ if len(submissions) > responses_expected:
 if good_to_go:
 
     well_shuffled = False
+    print('Shuffling Tasks...')
     while not well_shuffled:
+        print('Shuffle!')
         jumble = submissions.copy()
+        # tasks = [x for x in submissions['Secret Task']]
         for k in ['1','2','3']:
-            jumble['st'+k] = [x for x in submissions['Secret Task '+k].tolist().shuffle()]
+            print('\tAssign!',k)
+            jumble['st'+k] = [x for x in submissions['Secret Task '+k].sample(frac=1).tolist()]
+            # jumble['st' + k] = [x for x in submissions['Secret Task ' + k].tolist()]
 
         jumble['dupes'] = np.where((jumble['Secret Task 1' ] == jumble.st1) |
                                    (jumble['Secret Task 2' ] == jumble.st2) |
@@ -46,14 +53,15 @@ if good_to_go:
                                    1,0)
         if jumble.dupes.sum() == 0:
             well_shuffled = True
+            print('Good Shuffle!')
 
     # Save a full copy of the submissions for later review
-    with open('shuffled_tasks.pkl') as f:
+    with open('shuffled_tasks.pkl','wb') as f:
         pickle.dump(jumble, f)
 
 ## SHARE THE SUBMISSIONS AND ASK FOR SELECTIONS
 
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
+    with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         server.starttls()
         server.login(facilitator['email'], facilitator['pwd'])
 
@@ -71,7 +79,7 @@ if good_to_go:
                 'Best of Luck,',
                 'Your Secret Agent Santa Bot'
             ])
-            server.sendmail(faciliator['email'], family[row[1]['Who Are You?']]['email'], message)
+            server.sendmail(facilitator['email'], family[row[1]['Who Are You?']]['email'], message)
 
 
 
