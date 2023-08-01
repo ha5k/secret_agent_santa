@@ -1,3 +1,5 @@
+
+
 import pandas as pd
 import smtplib
 import pickle
@@ -5,12 +7,13 @@ import numpy as np
 import sas_utils
 from random import shuffle
 
-responses_expected = 4 #number of people you were expecting to have responded
+
 
 ## LOAD IN FAMILY AND FORM INFORMATION, THEN READ IN RESPONSES
 
 family, forms, facilitator = sas_utils.load_pickles()
 submissions = sas_utils.read_form(forms['submit_tasks'][1])
+responses_expected = len(family) #number of people you were expecting to have responded
 
 ## CHECK THE NUMBER OF RESPONSES IN THE GOOGLE FORM
 
@@ -79,7 +82,8 @@ if good_to_go:
                 'Best of Luck,',
                 'Your Secret Agent Santa Bot'
             ])
-            server.sendmail(facilitator['email'], family[row[1]['Who Are You?']]['email'], message)
+            server.sendmail(facilitator['email'], family[row[1]['Who Are You?']][0],
+                            message.replace('\u2019', '"').replace('\u201c', '"').replace('\u201d', '"'))
 
 
 

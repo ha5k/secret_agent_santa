@@ -1,5 +1,6 @@
 import pandas as pd
 import pickle
+import smtplib
 
 def read_form(url_in):
     url_use = url_in.replace('/edit#gid=', '/export?format=csv&gid=')
@@ -55,7 +56,7 @@ def too_few_responses(submissions, form_to_send, family, facilitator):
     if send_reminder == 'y':
         responder_names = submissions['Who Are You?'].tolist()
 
-        with smtplib.SMTP(smtp_server, smtp_port) as server:
+        with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
             server.starttls()
             server.login(facilitator['email'], facilitator['pwd'])
 
@@ -69,7 +70,7 @@ def too_few_responses(submissions, form_to_send, family, facilitator):
                         "If you have any questions, get in touch with Eamonn! He can help!",
                         "Please advise,\nYour Secret Agent Santa Bot"
                     ])
-                    server.sendmail(faciliator['email'], family[member]['email'], message)
+                    server.sendmail(facilitator['email'], family[member][0], message)
 
 def too_many_responses(submissions, family):
     responder_names = submissions['Who Are You?'].tolist()
