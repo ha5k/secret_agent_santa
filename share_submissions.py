@@ -70,6 +70,7 @@ if good_to_go:
 
         for row in jumble.iterrows():
             message = '\n'.join([
+                'Subject: {}\n\n'.format('Select your Secret Agent Santa Task'),
                 f"Greetings, {row[1]['Who Are You?']}\n",
                 "It's time for you to select your Secret Agent Santa task. The Secret Agent will receive your selection as one of their tasks.\n",
                 "Remember, for the task to count, YOU have to do whatever task you select. Choose wisely.\n",
@@ -84,6 +85,7 @@ if good_to_go:
             ])
             server.sendmail(facilitator['email'], family[row[1]['Who Are You?']][0],
                             message.replace('\u2019', '"').replace('\u201c', '"').replace('\u201d', '"'))
+            # TODO This unicode replacement is rough. Consider fixing.
 
 
 

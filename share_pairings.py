@@ -85,23 +85,28 @@ if good_to_go:
         for giver in gifters:
             if results[giver][0] == family[giver][1]:
                 good_solution = False
-                print('Broken Pair: %s got %s'%(giver, results[giver][0]))
+                print('Broken Pair, Try Again')
                 break
 
+    ## SHARE THE TASKS AND THE INFO FOR THE SECRET AGENT
 
-
-
-
-    ## SHARE THE SUBMISSIONS AND ASK FOR SELECTIONS
+    sas_gifting_msg = 'Remember, the Secret Agent this year is NOT part of secret santa.'
+    if sas_gets_present:
+        sas_gifting_msg = 'Remember, the Secret Agent this year IS part of secret santa. They get and give a present'
 
     with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         server.starttls()
         server.login(facilitator['email'], facilitator['pwd'])
 
-        for row in jumble.iterrows():
+        for row in results.iterrows():
+
+            #TODO: You need to get smart with how the SAS message is different from the normies. And include each person's task(s) as a part of the message
+
             message = '\n'.join([
+                'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Task'),
                 f"Greetings, {row[1]['Who Are You?']}\n",
-                "It's time for you to select your Secret Agent Santa task. The Secret Agent will receive your selection as one of their tasks.\n",
+                "Get excited, your Secret Agent Santa tasks are ready!\n",
+                sas_gifting_msg+'\n',
                 "Remember, for the task to count, YOU have to do whatever task you select. Choose wisely.\n",
                 "The tasks you can choose from are:",
                 f"\tTask A: {row[1].st1}",
@@ -112,7 +117,8 @@ if good_to_go:
                 'Best of Luck,',
                 'Your Secret Agent Santa Bot'
             ])
-            server.sendmail(facilitator['email'], family[row[1]['Who Are You?']]['email'], message)
+            server.sendmail(facilitator['email'], family[row[1]['Who Are You?']]['email'],
+                            message.replace('\u2019', '"').replace('\u201c', '"').replace('\u201d', '"'))
 
 
 

@@ -16,7 +16,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     server.login(facilitator['email'], facilitator['pwd'])
     for member in family:
         print('Working on:',member)
-        message = '\n\n'.join([f'Subject: Secret Santa',
+        message = '\n\n'.join([f'Subject: Submit your tasks for Secret Agent Santa!',
                                f'Hi {member}',
                                f'Please submit three tasks for the 2023 Edition of Secret Agent Santa at the following link:',
                                forms['submit_tasks'][0],
