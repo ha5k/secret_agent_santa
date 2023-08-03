@@ -6,7 +6,7 @@ import sas_utils
 import random
 
 sas_gets_present = True #Toggle whether the secret agent is also part of secret santa
-personae_non_grata = ['Mom','Dad'] #List of people not eligible for being the secret agent
+personae_non_grata = ['Mom', 'Dad', 'Peggy', 'David'] #List of people not eligible for being the secret agent
 set_seed = 10
 
 
@@ -44,13 +44,22 @@ if good_to_go:
 
     vetted_tasks = submissions.copy().drop_duplicates(subset = 'Who Are You?', keep = 'last') #Drop extra submissions
 
-    tasks = []
+    use_tasks = {}
     for row in vetted_tasks.iterrows():
-        name = row[1].values[0]
-        selection = row[1].values[1]
+        name = row[1].values[1]
+        selection = row[1].values[2]
+        if selection == 'Task A':
+            use_task = 'st1'
+        elif selection == 'Task B':
+            use_task = 'st2'
+        elif selection == 'Task C':
+            use_task = 'st3'
+        else:
+            print('Something happened with your task selection process. Assuming Task A')
+            use_task = 'st1'
 
-
-        tasks.append(all_tasks.loc[all_tasks['Who Are You?'] == f, submissions])
+        use_tasks[name] = all_tasks.loc[all_tasks['Who Are You?'] == name, use_task].values[0]
+        # append([all_tasks.loc[all_tasks['Who Are You?'] == name, use_task].values[0],name])
 
     print("Let's make some pairings!")
 
@@ -61,10 +70,7 @@ if good_to_go:
         random.shuffle(gifters)
 
         #Select the secret agent, separate them if needed
-        if sas_gets_present:
-            sas = gifters[0]
-        else:
-            sas = gifters.pop(0)
+        sas = gifters[0]
 
         #Make sure the SAS is up for the task
         if sas not in personae_non_grata:
@@ -90,37 +96,47 @@ if good_to_go:
 
     ## SHARE THE TASKS AND THE INFO FOR THE SECRET AGENT
 
-    sas_gifting_msg = 'Remember, the Secret Agent this year is NOT part of secret santa.'
+    sas_gifting_msg = "Remember, the Secret Agent this year IS NOT part of secret santa. They don't get or give a gift."
     if sas_gets_present:
-        sas_gifting_msg = 'Remember, the Secret Agent this year IS part of secret santa. They get and give a present'
+        sas_gifting_msg = 'Remember, the Secret Agent this year IS part of secret santa. They get and give a gift.'
 
+    sas_task_string = 'You ARE the Secret Agent. Your mission objectives are ' \
+                      'as follows:\n'+'\n'.join(['\t-'+use_tasks[k] for k in use_tasks])
+
+    print('Formatting and sending emails...')
     with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         server.starttls()
         server.login(facilitator['email'], facilitator['pwd'])
 
-        for row in results.iterrows():
+        for giver in results:
 
-            #TODO: You need to get smart with how the SAS message is different from the normies. And include each person's task(s) as a part of the message
+            receiver = results[giver][0]
+            is_sas = results[giver][1]
+
+            if is_sas: #Giver is the secret agent. Their tasks need to be a list
+                task_string = sas_task_string
+                preface = 'Time to work on your poker face because...'
+            else:
+                task_string = 'You are NOT the Secret Agent, but still have to ' \
+                              'complete the mission you selected:\n\t-'+use_tasks[giver]
+                preface = f'You have been randomly assigned to get a present for {receiver}\n\nAlso...'
 
             message = '\n'.join([
-                'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Task'),
-                f"Greetings, {row[1]['Who Are You?']}\n",
-                "Get excited, your Secret Agent Santa tasks are ready!\n",
-                sas_gifting_msg+'\n',
-                "Remember, for the task to count, YOU have to do whatever task you select. Choose wisely.\n",
-                "The tasks you can choose from are:",
-                f"\tTask A: {row[1].st1}",
-                f"\tTask B: {row[1].st2}",
-                f"\tTask C: {row[1].st3}\n",
-                "Please make your selection here:",
-                forms['select_tasks'][0] + '\n',
-                'Best of Luck,',
+                'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results'),
+                f"Hey there, {giver}\n",
+                'Get excited, your Secret Agent Santa tasks are ready! '+sas_gifting_msg,
+                '',
+                preface,
+                task_string,
+                '',
+                'HO HO HO,',
                 'Your Secret Agent Santa Bot'
             ])
-            server.sendmail(facilitator['email'], family[row[1]['Who Are You?']]['email'],
+
+            server.sendmail(facilitator['email'], family[giver][0],
                             message.replace('\u2019', '"').replace('\u201c', '"').replace('\u201d', '"'))
 
-
+            print(f'\t...sent to {giver} at {family[giver][0]}')
 
 
 

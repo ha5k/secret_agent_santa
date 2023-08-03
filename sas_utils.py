@@ -76,7 +76,7 @@ def too_few_responses(submissions, form_to_send, family, facilitator):
 def too_many_responses(submissions, family):
     responder_names = submissions['Who Are You?'].tolist()
     for member in family:
-        if responder_names.count(member) >= 1:
+        if responder_names.count(member) > 1:
             print(f'\t{member} is duplicated')
 
     cont = input('Want to continue with the most recent submissions? (y/n)')
