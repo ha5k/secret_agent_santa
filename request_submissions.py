@@ -15,6 +15,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     server.starttls()
     server.login(facilitator['email'], facilitator['pwd'])
     for member in family:
+        member = 'Mom'
         print('Working on:',member)
         message = '\n\n'.join([f'Subject: Submit your tasks for Secret Agent Santa!',
                                f'Hi {member}',
@@ -23,6 +24,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                                'Cheers,\nYour Secret Agent Santa Bot'
                                ])
         server.sendmail(facilitator['email'], family[member][0], message)
+        break
 
 
 

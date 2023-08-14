@@ -116,13 +116,18 @@ if good_to_go:
             if is_sas: #Giver is the secret agent. Their tasks need to be a list
                 task_string = sas_task_string
                 preface = 'Time to work on your poker face because...'
+                if sas_gets_present:
+                    preface = f'You have been randomly assigned to get a present for {receiver}\n\nAlso...'+preface
             else:
                 task_string = 'You are NOT the Secret Agent, but still have to ' \
                               'complete the mission you selected:\n\t-'+use_tasks[giver]
                 preface = f'You have been randomly assigned to get a present for {receiver}\n\nAlso...'
 
             message = '\n'.join([
-                'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results'),
+
+                'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results'), #todo fix the subject to break conversations
+
+
                 f"Hey there, {giver}\n",
                 'Get excited, your Secret Agent Santa tasks are ready! '+sas_gifting_msg,
                 '',
@@ -132,7 +137,6 @@ if good_to_go:
                 'HO HO HO,',
                 'Your Secret Agent Santa Bot'
             ])
-
             server.sendmail(facilitator['email'], family[giver][0],
                             message.replace('\u2019', '"').replace('\u201c', '"').replace('\u201d', '"'))
 

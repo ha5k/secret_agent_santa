@@ -69,6 +69,7 @@ if good_to_go:
         server.login(facilitator['email'], facilitator['pwd'])
 
         for row in jumble.iterrows():
+            print('Sending message to: '+row[1]['Who Are You?'])
             message = '\n'.join([
                 'Subject: {}\n\n'.format('Select your Secret Agent Santa Task'),
                 f"Greetings, {row[1]['Who Are You?']}\n",
