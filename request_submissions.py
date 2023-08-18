@@ -28,7 +28,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                                'Cheers,\nYour Secret Agent Santa Bot'
                                ])
         server.sendmail(facilitator['email'], family[member][0], message)
-        break
+
 
 
 
