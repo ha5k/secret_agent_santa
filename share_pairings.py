@@ -140,7 +140,7 @@ if good_to_go:
                 'Your Secret Agent Santa Bot'
             ])
             server.sendmail(facilitator['email'], family[giver][0],
-                            message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"')).replace('\u2018', "'")
+                            message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'"))
 
             print(f'\t...sent to {giver} at {family[giver][0]}')
 
