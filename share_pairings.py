@@ -111,7 +111,7 @@ if good_to_go:
         server.login(facilitator['email'], facilitator['pwd'])
 
         subject = 'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results')
-        if is_a_test == 'y':
+        if is_a_test != 'y':
             subject = 'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results ('+str(round(time()))+')')
         for giver in results:
 

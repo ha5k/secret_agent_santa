@@ -71,7 +71,7 @@ if good_to_go:
         server.login(facilitator['email'], facilitator['pwd'])
 
         subject = 'Subject: {}\n\n'.format('Select your Secret Agent Santa Task')
-        if is_a_test == 'y':
+        if is_a_test != 'y':
             subject = 'Subject: {}\n\n'.format('Select your TEST Secret Agent Santa Task ('+str(round(time()))+')')
         for row in jumble.iterrows():
             print('Sending message to: '+row[1]['Who Are You?'])

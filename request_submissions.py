@@ -17,7 +17,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     server.starttls()
     server.login(facilitator['email'], facilitator['pwd'])
     subject = f'Subject: Submit your tasks for Secret Agent Santa!'
-    if is_a_test == 'y':
+    if is_a_test != 'y':
         subject = f'Subject: Submit your tasks for the TEST Secret Agent Santa! ({round(time())})'
     for member in family:
         member = 'Mom'
