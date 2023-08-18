@@ -110,6 +110,9 @@ if good_to_go:
         server.starttls()
         server.login(facilitator['email'], facilitator['pwd'])
 
+        subject = 'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results')
+        if is_a_test == 'y':
+            subject = 'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results ('+str(round(time()))+')')
         for giver in results:
 
             receiver = results[giver][0]
@@ -126,10 +129,7 @@ if good_to_go:
                 preface = f'You have been randomly assigned to get a present for {receiver}\n\nAlso...'
 
             message = '\n'.join([
-
-                'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results'), #todo fix the subject to break conversations
-
-
+                subject,
                 f"Hey there, {giver}\n",
                 'Get excited, your Secret Agent Santa tasks are ready! '+sas_gifting_msg,
                 '',

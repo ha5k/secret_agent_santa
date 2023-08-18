@@ -70,10 +70,13 @@ if good_to_go:
         server.starttls()
         server.login(facilitator['email'], facilitator['pwd'])
 
+        subject = 'Subject: {}\n\n'.format('Select your Secret Agent Santa Task')
+        if is_a_test == 'y':
+            subject = 'Subject: {}\n\n'.format('Select your TEST Secret Agent Santa Task ('+str(round(time()))+')')
         for row in jumble.iterrows():
             print('Sending message to: '+row[1]['Who Are You?'])
             message = '\n'.join([
-                'Subject: {}\n\n'.format('Select your Secret Agent Santa Task'),
+                subject,
                 f"Greetings, {row[1]['Who Are You?']}\n",
                 "It's time for you to select your Secret Agent Santa task. The Secret Agent will receive your selection as one of their tasks.\n",
                 "Remember, for the task to count, YOU have to do whatever task you select. Choose wisely.\n",

@@ -16,10 +16,13 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     print('Connection Opened!')
     server.starttls()
     server.login(facilitator['email'], facilitator['pwd'])
+    subject = f'Subject: Submit your tasks for Secret Agent Santa!'
+    if is_a_test == 'y':
+        subject = f'Subject: Submit your tasks for the TEST Secret Agent Santa! ({round(time())})'
     for member in family:
         member = 'Mom'
         print('Working on:',member)
-        message = '\n\n'.join([f'Subject: Submit your tasks for Secret Agent Santa!',
+        message = '\n\n'.join([subject,
                                f'Hi {member}',
                                f'Please submit three tasks for the 2023 Edition of Secret Agent Santa at the following link:',
                                forms['submit_tasks'][0],
