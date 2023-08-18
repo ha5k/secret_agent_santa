@@ -15,7 +15,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     print('Connection Opened!')
     server.starttls()
     server.login(facilitator['email'], facilitator['pwd'])
-    subject = f'Subject: This is a test email {round(time())}'
+    subject = f'Subject: This is a test email ({round(time())})'
 
     message = '\n\n'.join([subject,
                            f'Hi -',
