@@ -89,7 +89,7 @@ if good_to_go:
                 'Best of Luck,',
                 'Your Secret Agent Santa Bot'
             ])
-            server.sendmail(facilitator['email'], 'eamonn.shirey@gmail.com',#family[row[1]['Who Are You?']][0],
+            server.sendmail(facilitator['email'], family[row[1]['Who Are You?']][0],
                             message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'"))
             # TODO This unicode replacement is rough. Consider fixing.
 
