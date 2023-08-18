@@ -9,6 +9,7 @@ from time import time
 sas_gets_present = True #Toggle whether the secret agent is also part of secret santa
 personae_non_grata = ['Mom', 'Dad', 'Peggy', 'David'] #List of people not eligible for being the secret agent
 set_seed = 10
+is_a_test = input("Type 'y' to confirm this is not a test: ")
 
 
 ## LOAD IN FAMILY AND FORM INFORMATION, THEN READ IN RESPONSES

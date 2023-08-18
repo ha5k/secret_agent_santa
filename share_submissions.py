@@ -15,6 +15,7 @@ from random import shuffle
 family, forms, facilitator = sas_utils.load_pickles()
 submissions = sas_utils.read_form(forms['submit_tasks'][1])
 responses_expected = len(family) #number of people you were expecting to have responded
+is_a_test = input("Type 'y' to confirm this is not a test: ")
 
 ## CHECK THE NUMBER OF RESPONSES IN THE GOOGLE FORM
 
@@ -85,7 +86,7 @@ if good_to_go:
                 'Best of Luck,',
                 'Your Secret Agent Santa Bot'
             ])
-            server.sendmail(facilitator['email'], family[row[1]['Who Are You?']][0],
+            server.sendmail(facilitator['email'], 'eamonn.shirey@gmail.com',#family[row[1]['Who Are You?']][0],
                             message.replace('\u2019', '"').replace('\u201c', '"').replace('\u201d', '"'))
             # TODO This unicode replacement is rough. Consider fixing.
 

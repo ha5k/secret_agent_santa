@@ -8,6 +8,7 @@ from time import time
 
 ## LOAD IN FAMILY AND FORM INFORMATION
 family, forms, facilitator = sas_utils.load_pickles()
+is_a_test = input("Type 'y' to confirm this is not a test: ")
 
 ## SEND LINK TO SUBMIT TASKS
 print('Opening Email Connection...')
