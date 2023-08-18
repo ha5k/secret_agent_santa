@@ -4,6 +4,7 @@ import pandas
 import smtplib
 import pickle
 import sas_utils
+from time import time
 
 ## LOAD IN FAMILY AND FORM INFORMATION
 family, forms, facilitator = sas_utils.load_pickles()

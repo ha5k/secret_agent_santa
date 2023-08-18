@@ -5,6 +5,7 @@ import smtplib
 import pickle
 import numpy as np
 import sas_utils
+from time import time
 from random import shuffle
 
 

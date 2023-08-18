@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 import sas_utils
 import random
+from time import time
 
 sas_gets_present = True #Toggle whether the secret agent is also part of secret santa
 personae_non_grata = ['Mom', 'Dad', 'Peggy', 'David'] #List of people not eligible for being the secret agent
