@@ -20,7 +20,6 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     if is_a_test != 'y':
         subject = f'Subject: Submit your tasks for the TEST Secret Agent Santa! ({round(time())})'
     for member in family:
-        member = 'Mom'
         print('Working on:',member)
         message = '\n\n'.join([subject,
                                f'Hi {member}',
