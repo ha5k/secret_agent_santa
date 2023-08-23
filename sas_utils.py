@@ -63,6 +63,7 @@ def too_few_responses(submissions, form_to_send, family, facilitator):
 
             for member in family:
                 if responder_names.count(member) <= 0:
+                    print('Following up with ',member)
                     message = '\n\n'.join([
                         f'Hey there {member}',
                         "It looks like like you haven't submitted tasks for Secret Agent Santa.",
