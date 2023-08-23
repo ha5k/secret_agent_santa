@@ -22,6 +22,10 @@ is_a_test = input("Type 'y' to confirm this is not a test: ")
 good_to_go = True
 if len(submissions.drop_duplicates(subset = 'Who Are You?')) < responses_expected:
     print("You're missing responses from someone in the family")
+    names_submitted = submissions['Who Are You?'].drop_duplicates().tolist()
+    names_to_send = [x for x in list(family) if x not in names_submitted]
+    print("Those people are:\n\t",'\n\t'.join(names_to_send))
+
     good_to_go = False
     sas_utils.too_few_responses(submissions, forms['submit_tasks'][0], family, facilitator)
 
