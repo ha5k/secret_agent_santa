@@ -49,42 +49,46 @@ if len(submissions) > responses_expected:
     if len(submissions) == responses_expected:
         good_to_go = True
 
-## SHUFFLE THE TASKS SO NO ONE GETS THEIR OWN (IF GOOD TO GO AHEAD)
+## Merge tasks from form back into the family pickle
+all_submissions = []
+for member in family:
+    if len(family[member].submissions) != 0:
+        input('Member %s already has tasks submiitted. You sure you are good to overwrite?'%family[member].name)
+for n in submissions['Who Are You?'].tolist():
+    print('Gathering Submissions from ', n)
+    s = submissions.loc[submissions['Who Are You?'] == n, ['Secret Task 1', 'Secret Task 2', 'Secret Task 3']].values.flatten().tolist()
+    all_submissions += s
+    family[n].submissions = s
+for member in family:
+    if len(family[member].submissions) != 3:
+        input('Something is up with %s and their tasks' % member.name)
 
-if good_to_go:
-    iter_count = 0
-    well_shuffled = False
-    # print('Shuffling Tasks...')
-    while not well_shuffled:
-        # print('Shuffle!')
-        jumble = submissions.copy()
-        # tasks = [x for x in submissions['task_1']]
-        for k in ['1','2','3']:
-            # print('\tAssign!',k)
-            jumble['st'+k] = [x for x in submissions['Secret Task '+k].sample(frac=1).tolist()]
-            # jumble['st' + k] = [x for x in submissions['Secret Task ' + k].tolist()]
+## Shuffle the tasks so no one gets their own
+success = False
+while not success:
+    success = True
+    temp_submits = [k for k in all_submissions]
+    shuffle(temp_submits)
+    for member in family:
+        k = 0
+        temp_selects = []
+        while len(temp_selects) < 3:
+            if temp_submits[k] not in family[member].submissions:
+                temp_selects.append(temp_submits.pop(k))
+            else:
+                k += 1
+            if len(temp_submits) <= k and len(temp_selects) <3:
+                success = False
+                print('FAIL! Restarting')
+                for m in family:
+                    family[m].selections = []
+                break
+        family[member].selections = temp_selects
 
-        jumble['dupes'] = np.where((jumble['Secret Task 1' ] == jumble.st1) |
-                                   (jumble['Secret Task 2' ] == jumble.st2) |
-                                   (jumble['Secret Task 3' ] == jumble.st3),
-                                   1,0)
+## Save a copy of the family pickle with task information
+with open('family.pkl','wb') as f:
+    pickle.dump(family, f)
 
-        # jumble = sas_utils.shuffle_tasks(jumble)
-        iter_count += 1
-        if jumble.dupes.sum() == 0:
-
-            well_shuffled = True
-            # print('Good Shuffle!')
-
-    # print(jumble)
-    # if iter_count > 1: print(iter_count)
-    rounds.append(iter_count)
-    if len(rounds) % 100 == 0: print('Finished %i rounds'%len(rounds))
-    pd.DataFrame(rounds).to_clipboard()
-
-    # # Save a full copy of the submissions for later review
-    # with open('shuffled_tasks.pkl','wb') as f:
-    #     pickle.dump(jumble, f)
 
 ## SHARE THE SUBMISSIONS AND ASK FOR SELECTIONS
 
