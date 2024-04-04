@@ -1,8 +1,5 @@
-import ssl
 
-import pandas
 import smtplib
-import pickle
 import sas_utils
 from time import time
 
@@ -20,16 +17,15 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     if is_a_test != 'y':
         subject = f'Subject: Submit your tasks for the TEST Secret Agent Santa! ({round(time())})'
     for member in family:
-        print('Working on:',member)
-        message = '\n\n'.join([subject,
-                               f'Hi {member}',
-                               f'Please submit three tasks for the 2023 Edition of Secret Agent Santa at the following link:',
-                               forms['submit_tasks'][0],
-                               'Cheers,\nYour Secret Agent Santa Bot'
-                               ])
-        server.sendmail(facilitator['email'], family[member][0], message)
-
-
-
-
-
+        if member.playing:
+            print('Working on:'+member.name)
+            message = '\n\n'.join([subject,
+                                   f'Hi {member.name}',
+                                   f'Please submit three tasks for the 2024 Edition of Secret Agent Santa at the following link:',
+                                   forms['submit_tasks'][0],
+                                   'Cheers,\nYour Secret Agent Santa Bot'
+                                   ])
+            server.sendmail(facilitator['email'], member.email, message)
+        else:
+            print('Skipping ' + member.name + " because they're lame")
+    print('Done requesting submissions!')

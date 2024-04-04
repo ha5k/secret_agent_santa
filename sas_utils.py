@@ -2,6 +2,8 @@ import pandas as pd
 import pickle
 import smtplib
 
+from random import shuffle
+
 def read_form(url_in):
     url_use = url_in.replace('/edit#gid=', '/export?format=csv&gid=')
     if url_use == url_in:
@@ -25,7 +27,7 @@ def shuffle_tasks(df):
         k = 0
         tasks_per_person = 3
         task_list = {}
-        for n in df.name:
+        for n in df['Who Are You?']:
             per_tasks = []
             for t in range(tasks_per_person):
                 per_tasks.append(tasks[k + t])

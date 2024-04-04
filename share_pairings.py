@@ -108,7 +108,8 @@ if good_to_go:
     print('Formatting and sending emails...')
     with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         server.starttls()
-        server.login(facilitator['email'], facilitator['pwd'])
+        # server.login(facilitator['email'], facilitator['pwd'])
+
 
         subject = 'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results')
         if is_a_test != 'y':
