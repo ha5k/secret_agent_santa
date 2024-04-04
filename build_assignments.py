@@ -6,19 +6,18 @@ import sas_utils
 import random
 from time import time
 
-sas_gets_present = True #Toggle whether the secret agent is also part of secret santa
-personae_non_grata = ['Mom', 'Dad', 'Peggy', 'David'] #List of people not eligible for being the secret agent
-set_seed = 10
+sas_gets_present = True  # Toggle whether the secret agent is also part of secret santa
+personae_non_grata = ['Mom', 'Dad', 'Peggy', 'David']  # List of people not eligible for being the secret agent
 is_a_test = input("Type 'y' to confirm this is not a test: ")
 
 
-## LOAD IN FAMILY AND FORM INFORMATION, THEN READ IN RESPONSES
+# LOAD IN FAMILY AND FORM INFORMATION, THEN READ IN RESPONSES
 family, forms, facilitator = sas_utils.load_pickles()
 submissions = sas_utils.read_form(forms['select_tasks'][1])
-responses_expected = len(family) #number of people you were expecting to have responded
+responses_expected = len([family[member] for member in family if family[member].playing])  # no. of expected responses
 
 
-## MAKE SURE YOU HAVE ENOUGH RESPONSES
+# MAKE SURE YOU HAVE ENOUGH RESPONSES
 
 good_to_go = True
 if len(submissions.drop_duplicates(subset='Who Are You?')) < responses_expected:

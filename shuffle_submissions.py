@@ -15,7 +15,7 @@ from random import shuffle
 family, forms, facilitator = sas_utils.load_pickles()
 submissions = sas_utils.read_form(forms['submit_tasks'][1])
 
-responses_expected = len(family) #number of people you were expecting to have responded
+responses_expected = len([family[member] for member in family if family[member].playing])  # no. of expected responses
 is_a_test = input("Type 'y' to confirm this is not a test: ")
 
 ## CHECK THE NUMBER OF RESPONSES IN THE GOOGLE FORM
