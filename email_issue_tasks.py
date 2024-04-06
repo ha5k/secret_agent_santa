@@ -58,3 +58,15 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                         message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'"))
 
         print(f'\t...sent to {member} at {family[member].email}')
+
+    print('Sending Secret Tasks Email')
+    message = '\n'.join([
+        'SECRET TASK LIST DETAILS FOR CEREMONY',
+        '\n'.join(['THISISASECRETTHISISASECRETTHISISASECRET' for k in range(5)]),
+        'THE SECRET TASKS ARE:',
+        '\t' + '\n\t'.join(family[member].tasks),
+        '\nGood Luck'
+    ])
+    server.sendmail(facilitator['email'], family[member].email,
+                    message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'"))
+    print('Ceremony Details Sent. Do not read them')

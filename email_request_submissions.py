@@ -1,6 +1,7 @@
 
 import smtplib
 import sas_utils
+from sas_utils import person
 from time import time
 
 ## LOAD IN FAMILY AND FORM INFORMATION
@@ -18,7 +19,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         subject = f'Subject: Submit your tasks for the TEST Secret Agent Santa! ({round(time())})'
     for member in family:
         if family[member].playing:
-            print('Working on:'+member)
+            print('Working on: '+member)
             message = '\n\n'.join([subject,
                                    f'Hi {member}',
                                    f'Please submit three tasks for the 2024 Edition of Secret Agent Santa at the following link:',
