@@ -28,7 +28,7 @@ if len(submissions.drop_duplicates(subset = 'Who Are You?')) < responses_expecte
     print(f"You have responses from {len(submissions['Who Are You?'].drop_duplicates())} people")
 
     names_submitted = submissions['Who Are You?'].drop_duplicates().tolist()
-    names_to_send = [x for x in list(family) if x not in names_submitted]
+    names_to_send = [x for x in list(family) if x not in names_submitted and family[x].playing]
 
     print("The missing people are:\n\t", '\n\t'.join(names_to_send))
 
