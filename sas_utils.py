@@ -73,7 +73,7 @@ def load_pickles():
 
 def too_few_responses(submissions, form_to_send, family, facilitator):
 
-    send_reminder = input('You want me to send a reminder email? (y/n)')
+    send_reminder = input('You want me to send a reminder email? (y/n) ')
     if send_reminder == 'y':
         responder_names = submissions['Who Are You?'].tolist()
         print('You got it, boss')
