@@ -2,6 +2,25 @@ import pandas as pd
 import pickle
 import smtplib
 
+
+class person(object):
+    name = ''
+    email = ''
+    partner = ''
+    playing = True
+    submissions = []
+    selections = []
+    tasks = []
+    is_agent = False
+    gives_to = ''
+
+    def __init__(self, name, email, partner, playing):
+        self.name = name
+        self.email = email
+        self.partner = partner
+        self.playing = playing
+
+
 from random import shuffle
 
 def read_form(url_in):
