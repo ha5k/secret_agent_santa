@@ -83,7 +83,7 @@ def too_few_responses(submissions, form_to_send, family, facilitator):
             server.login(facilitator['email'], facilitator['pwd'])
 
             for member in family:
-                if responder_names.count(member) <= 0:
+                if responder_names.count(member) <= 0 and family[member].playing :
                     print('Following up with ', member)
                     message = '\n\n'.join([
                         f'Hey there {member}',
