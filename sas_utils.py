@@ -10,38 +10,38 @@ def read_form(url_in):
         url_use = url_in.replace('/edit?resourcekey#gid=', '/export?format=csv&gid=')
     return pd.read_csv(url_use)
 
-def shuffle_tasks(df):
-
-    ## BUILD TASKS
-    tasks = []
-    for k in ['1', '2', '3']:
-        tmp = [x for x in df['task_' + k]]
-        tasks += tmp
-
-    fail_test = True
-    while fail_test:
-        fail_test = False
-
-        ## SHUFFLE TASKS
-        shuffle(tasks)
-        k = 0
-        tasks_per_person = 3
-        task_list = {}
-        for n in df['Who Are You?']:
-            per_tasks = []
-            for t in range(tasks_per_person):
-                per_tasks.append(tasks[k + t])
-            task_list[n] = per_tasks
-            k += tasks_per_person
-
-        ## VALIDATE TASKS
-        for n in task_list:
-            for k in range(tasks_per_person):
-                if df.loc[df.name == n, 'task_1'].values == task_list[n][k]:
-                    fail_test = True
-                    # print('Failed because:', n, task_list[n][k])
-
-    return (task_list)
+# def shuffle_tasks(df):
+#
+#     ## BUILD TASKS
+#     tasks = []
+#     for k in ['1', '2', '3']:
+#         tmp = [x for x in df['task_' + k]]
+#         tasks += tmp
+#
+#     fail_test = True
+#     while fail_test:
+#         fail_test = False
+#
+#         ## SHUFFLE TASKS
+#         shuffle(tasks)
+#         k = 0
+#         tasks_per_person = 3
+#         task_list = {}
+#         for n in df['Who Are You?']:
+#             per_tasks = []
+#             for t in range(tasks_per_person):
+#                 per_tasks.append(tasks[k + t])
+#             task_list[n] = per_tasks
+#             k += tasks_per_person
+#
+#         ## VALIDATE TASKS
+#         for n in task_list:
+#             for k in range(tasks_per_person):
+#                 if df.loc[df.name == n, 'task_1'].values == task_list[n][k]:
+#                     fail_test = True
+#                     # print('Failed because:', n, task_list[n][k])
+#
+#     return (task_list)
 
 def load_pickles():
     with open('family_details.pkl', 'rb') as f:
@@ -65,7 +65,7 @@ def too_few_responses(submissions, form_to_send, family, facilitator):
 
             for member in family:
                 if responder_names.count(member) <= 0:
-                    print('Following up with ',member)
+                    print('Following up with ', member)
                     message = '\n\n'.join([
                         f'Hey there {member}',
                         "It looks like like you haven't submitted tasks for Secret Agent Santa.",
@@ -74,7 +74,7 @@ def too_few_responses(submissions, form_to_send, family, facilitator):
                         "If you have any questions, get in touch with Eamonn! He can help!",
                         "Please advise,\nYour Secret Agent Santa Bot"
                     ])
-                    server.sendmail(facilitator['email'], family[member][0], message)
+                    server.sendmail(facilitator['email'], family[member].email, message)
 
 def too_many_responses(submissions, family):
     responder_names = submissions['Who Are You?'].tolist()
@@ -87,36 +87,3 @@ def too_many_responses(submissions, family):
         submissions.drop_duplicates(subset = 'Who Are You?', keep = 'last', inplace = True)
 
     return submissions
-
-### OLD  CODE
-'''
-import pandas as pd
-import smtplib
-import ssl
-import pickle
-import sas_utils
-
-with open('test.pkl', 'rb') as file:
-    vars = pickle.load(file)
-port = vars[0]
-password = vars[1]
-
-
-smtp_server = "smtp.gmail.com"
-sender_email = "kylesgonnahatethis@gmail.com"  # Enter your address
-receiver_email = "eamonn.shirey@gmail.com"  # Enter receiver address
-message = """\
-Subject: Hi there
-
-This message is sent from Python."""
-
-context = ssl.create_default_context()
-with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-    server.login(sender_email, password)
-    server.sendmail(sender_email, receiver_email, message)
-
-
-
-target = 'https://docs.google.com/spreadsheets/d/1FTQo7Int8YRHdBe6-QRKzJ0dr1uU3SZLaHRypyWudiY/edit#gid=1372196122'
-df = sas_utils.read_proposals(target)
-'''
