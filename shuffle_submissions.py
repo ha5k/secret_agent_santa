@@ -61,7 +61,7 @@ if good_to_go:
         all_submissions += s
         family[n].submissions = s
     for member in family:
-        if len(family[member].submissions) != 3:
+        if len(family[member].submissions) != 3 and family[member].playing:
             input('Something is up with %s and their tasks' % family[member].name)
 
     ## Shuffle the tasks so no one gets their own
@@ -71,20 +71,21 @@ if good_to_go:
         temp_submits = [k for k in all_submissions]
         shuffle(temp_submits)
         for member in family:
-            k = 0
-            temp_selects = []
-            while len(temp_selects) < 3:
-                if temp_submits[k] not in family[member].submissions:
-                    temp_selects.append(temp_submits.pop(k))
-                else:
-                    k += 1
-                if len(temp_submits) <= k and len(temp_selects) <3:
-                    success = False
-                    print('FAIL! Restarting')
-                    for m in family:
-                        family[m].selections = []
-                    break
-            family[member].selections = temp_selects
+            if family[member].playing:
+                k = 0
+                temp_selects = []
+                while len(temp_selects) < 3:
+                    if temp_submits[k] not in family[member].submissions:
+                        temp_selects.append(temp_submits.pop(k))
+                    else:
+                        k += 1
+                    if len(temp_submits) <= k and len(temp_selects) <3:
+                        success = False
+                        print('FAIL! Restarting')
+                        for m in family:
+                            family[m].selections = []
+                        break
+                family[member].selections = temp_selects
 
     ## Save a copy of the family pickle with task information
     with open('family.pkl','wb') as f:

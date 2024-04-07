@@ -24,7 +24,7 @@ if sas_gets_present:
 print('Formatting and sending emails...')
 with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     server.starttls()
-    # server.login(facilitator['email'], facilitator['pwd'])
+    server.login(facilitator['email'], facilitator['pwd'])
 
     subject = 'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results')
     if is_a_test != 'y':
@@ -34,13 +34,19 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
 
         if family[member].is_agent:  # Giver is the secret agent. Their tasks need to be a list
             task_string = 'You ARE the Secret Agent. Your mission objectives are ' \
-                              'as follows:\n ' + '\n'.join(['\t- ' + task for task in family[member].tasks])
+                              'as follows:\n ' + '\n'.join(['\t- ' + task for task in family[member].tasks[0]])
             preface = 'Time to work on your poker face because...'
+
+            sas_tasks = [k for k in family[member].tasks]
+
             if sas_gets_present:
                 preface = f'You have been randomly assigned to get a present for {family[member].gives_to}\n\nAlso... ' +preface
-        else:
+        elif family[member].playing:
             task_string = 'You are NOT the Secret Agent, but still have to ' \
                           'complete the mission you selected:\n\t- ' + family[member].tasks[0]
+            preface = f'You have been randomly assigned to get a present for {family[member].gives_to}\n\nAlso...'
+        else:
+            task_string = 'You have opted out of the agency this year. Probably wise!'
             preface = f'You have been randomly assigned to get a present for {family[member].gives_to}\n\nAlso...'
 
         message = '\n'.join([
@@ -61,12 +67,12 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
 
     print('Sending Secret Tasks Email')
     message = '\n'.join([
-        'SECRET TASK LIST DETAILS FOR CEREMONY',
+        'subject: SECRET TASK LIST DETAILS FOR CEREMONY',
         '\n'.join(['THISISASECRETTHISISASECRETTHISISASECRET' for k in range(5)]),
         'THE SECRET TASKS ARE:',
-        '\t' + '\n\t'.join(family[member].tasks),
+        '\t' + '\n\t'.join(sas_tasks),
         '\nGood Luck'
     ])
-    server.sendmail(facilitator['email'], family[member].email,
+    server.sendmail(facilitator['email'], facilitator['email'],
                     message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'"))
     print('Ceremony Details Sent. Do not read them')

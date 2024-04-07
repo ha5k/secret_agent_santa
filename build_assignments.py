@@ -41,7 +41,7 @@ if good_to_go:
     ## MAKE THE LIST OF TASKS FOR THE SECRET AGENT TO MAKE
     print('Making the task list')
     for member in selections['Who Are You?'].tolist():
-        print(member)
+        print('\t',member)
         selection = selections.loc[selections['Who Are You?'] == member, 'Which of your tasks do you choose?'].values[0]
         if selection == 'Task A':
             family[member].tasks = [family[member].selections[0]]
@@ -53,6 +53,9 @@ if good_to_go:
             print('Something weird is up with task selection for ', member)
             family[member].tasks = [family[member].selections[2]]
 
+    # Make sure you reset old results if needed
+    for member in family:
+        family[member].is_agent = False
 
     print("Let's make some pairings!")
     good_solution = False
@@ -73,8 +76,8 @@ if good_to_go:
 
     # Assign tasks to the Secret Agent
     for member in family:
-        if not family[member].is_agent:
-            family[sas].tasks.append(family[member].tasks)
+        if not family[member].is_agent and family[member].playing:
+            family[sas].tasks.append(family[member].tasks[0])
 
     # Make the pairings
     good_solution = False
@@ -91,7 +94,9 @@ if good_to_go:
                 print('Broken Pair, Try Again')
                 good_solution = False
                 break
-
-
+    print('You did it!')
+    ## Save a copy of the family pickle with task information
+    with open('family.pkl','wb') as f:
+        pickle.dump(family, f)
 
 
