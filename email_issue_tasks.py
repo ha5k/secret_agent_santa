@@ -34,7 +34,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
 
         if family[member].is_agent:  # Giver is the secret agent. Their tasks need to be a list
             task_string = 'You ARE the Secret Agent. Your mission objectives are ' \
-                              'as follows:\n ' + '\n'.join(['\t- ' + task for task in family[member].tasks[0]])
+                              'as follows:\n ' + '\n'.join(['\t- ' + task for task in family[member].tasks])
             preface = 'Time to work on your poker face because...'
 
             sas_tasks = [k for k in family[member].tasks]
