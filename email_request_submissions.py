@@ -19,7 +19,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         subject = f'Subject: Submit your tasks for the TEST Secret Agent Santa! ({round(time())})'
     for member in family:
         if family[member].playing:
-            print('Working on: '+member)
+            print('\tWorking on: '+member)
             message = '\n\n'.join([subject,
                                    f'Hi {member}',
                                    f'Please submit three tasks for the 2024 Edition of Secret Agent Santa at the following link:',
@@ -28,5 +28,5 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                                    ])
             server.sendmail(facilitator['email'], family[member].email, message)
         else:
-            print('Skipping ' + member + " because they're lame")
+            print('\tSkipping ' + member + " because they're lame")
     print('Done requesting submissions!')

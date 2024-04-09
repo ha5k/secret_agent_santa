@@ -88,6 +88,7 @@ if good_to_go:
                 family[member].selections = temp_selects
 
     ## Save a copy of the family pickle with task information
+    print('You should be good to go! Saving family pickle...')
     with open('family.pkl','wb') as f:
         pickle.dump(family, f)
 
