@@ -37,6 +37,15 @@ if len(selections) > responses_expected:
         good_to_go = True
 
 if good_to_go:
+    print("It's happening. You should be good to go")
+    cnfrm = input("Do you want to continue? There's no turning back from here... (y/n)")
+    if cnfrm != 'y':
+        print("Bailing out!")
+        good_to_go = False
+    else:
+        print("Let's do this! Good luck!")
+
+if good_to_go:
 
     ## MAKE THE LIST OF TASKS FOR THE SECRET AGENT TO MAKE
     print('Making the task list')
