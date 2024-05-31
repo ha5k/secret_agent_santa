@@ -22,6 +22,12 @@ responses_expected = len([family[member] for member in family if family[member].
 good_to_go = True
 if len(selections.drop_duplicates(subset='Who Are You?')) < responses_expected:
     print("You're missing responses from someone in the family")
+    print(f"You have responses from {len(selections['Who Are You?'].drop_duplicates())} people")
+    names_submitted = selections['Who Are You?'].drop_duplicates().tolist()
+    names_to_send = [x for x in list(family) if x not in names_submitted and family[x].playing]
+
+    print("The missing people are:\n\t", '\n\t'.join(names_to_send))
+
     good_to_go = False
     sas_utils.too_few_responses(selections, forms['select_tasks'][0], family, facilitator)
 
