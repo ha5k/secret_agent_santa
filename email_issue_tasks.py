@@ -61,7 +61,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
             'Your Secret Agent Santa Bot'
         ])
         server.sendmail(facilitator['email'], family[member].email,
-                        message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'"))
+                        message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'").replace('\u2013', '-').replace('\xe9',"[e-with-an-accent]").replace("\u2026",'...'))
 
         print(f'\t...sent to {member} at {family[member].email}')
 
@@ -74,5 +74,5 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         '\nGood Luck'
     ])
     server.sendmail(facilitator['email'], facilitator['email'],
-                    message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'"))
+                    message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'").replace('\u2013', '-').replace('\xe9',"[e-with-an-accent]").replace("\u2026",'...'))
     print('Ceremony Details Sent. Do not read them')

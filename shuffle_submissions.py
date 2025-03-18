@@ -54,7 +54,7 @@ if good_to_go:
     all_submissions = []
     for member in family:
         if len(family[member].submissions) != 0:
-            input('Member %s already has tasks submiitted. You sure you are good to overwrite?' % family[member].name)
+            input('Member %s already has tasks submitted. You sure you are good to overwrite?' % family[member].name)
     for n in submissions['Who Are You?'].tolist():
         print('Gathering Submissions from ', n)
         s = submissions.loc[submissions['Who Are You?'] == n, ['Secret Task 1', 'Secret Task 2', 'Secret Task 3']].values.flatten().tolist()
