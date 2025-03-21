@@ -25,12 +25,14 @@ class mission(object):
     details = ''
     submitter = '' ## This is just the name of the person, not the object
     id = ''
+    selected = False
 
     def __init__(self, title, details, submitter,id):
         self.title = title
         self.details = details
         self.submitter = submitter
         self.id = id
+        self.selected = False
 
 
 
