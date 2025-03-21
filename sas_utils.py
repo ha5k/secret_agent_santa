@@ -20,6 +20,19 @@ class person(object):
         self.partner = partner
         self.playing = playing
 
+class mission(object):
+    title = ''
+    details = ''
+    submitter = '' ## This is just the name of the person, not the object
+
+    def __init__(self, title, details, submitter):
+        self.title = title
+        self.details = details
+        self.submitter = submitter
+
+
+
+
 
 from random import shuffle
 
