@@ -28,13 +28,13 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
 
     subject = 'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results')
     if is_a_test != 'y':
-        subject = 'Subject: {}\n\n'.format('Your SECRET Secret Agent Santa Results ( ' + str(round(time())) + ')')
+        subject = 'Subject: {}\n\n'.format('TEST: Your TEST Secret Agent Santa Results ( ' + str(round(time())) + ')')
 
     for member in family:
 
         if family[member].is_agent:  # Giver is the secret agent. Their tasks need to be a list
             task_string = 'You ARE the Secret Agent. Your mission objectives are ' \
-                              'as follows:\n ' + '\n'.join(['\t- ' + task for task in family[member].tasks])
+                              'as follows:\n ' + '\n'.join(['\n' + task.title +'\n'+ task.details for task in family[member].tasks])
             preface = 'Time to work on your poker face because...'
 
             sas_tasks = [k for k in family[member].tasks]
@@ -43,7 +43,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                 preface = f'You have been randomly assigned to get a present for {family[member].gives_to}\n\nAlso... ' +preface
         elif family[member].playing:
             task_string = 'You are NOT the Secret Agent, but still have to ' \
-                          'complete the mission you selected:\n\t- ' + family[member].tasks[0]
+                          'complete the mission you selected:\n- ' + family[member].tasks[0].title + '\n'+ family[member].tasks[0].details
             preface = f'You have been randomly assigned to get a present for {family[member].gives_to}\n\nAlso...'
         else:
             task_string = 'You have opted out of the agency this year. Probably wise!'
@@ -70,7 +70,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         'subject: SECRET TASK LIST DETAILS FOR CEREMONY',
         '\n'.join(['THISISASECRETTHISISASECRETTHISISASECRET' for k in range(5)]),
         'THE SECRET TASKS ARE:',
-        '\t' + '\n\t'.join(sas_tasks),
+        '\t' + '\n\t'.join([k.title for k in sas_tasks]),
         '\nGood Luck'
     ])
     server.sendmail(facilitator['email'], facilitator['email'],
