@@ -22,7 +22,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
 
     subject = 'Subject: {}\n\n'.format('Select your Secret Agent Santa Task')
     if is_a_test != 'y':
-        subject = 'Subject: {}\n\n'.format('Select your TEST Secret Agent Santa Task ('+str(round(time()))+')')
+        subject = 'Subject: {}\n\n'.format('TEST: Select your TEST Secret Agent Santa Task ('+str(round(time()))+')')
     for member in family:
         if family[member].playing:
             print('Sending message to: '+family[member].name)
@@ -32,10 +32,17 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                 "It's time for you to select your Secret Agent Santa task. The Secret Agent will receive your selection as one of their tasks.\n",
                 "Remember, for the task to count, YOU have to do whatever task you select. Choose wisely.\n",
                 "The tasks you can choose from are:",
-                f"\tTask A: {family[member].selections[0]}",
-                f"\tTask B: {family[member].selections[1]}",
-                f"\tTask C: {family[member].selections[2]}\n",
-                "Please make your selection here:",
+
+                ## ESS-3: Updated to pull titles and details separately from new mission class
+                f"\nTask A: {family[member].selections[0].title}",
+                f"{family[member].selections[0].details}"
+                f"\nTask B: {family[member].selections[1].title}",
+                f"{family[member].selections[1].details}"
+                f"\nTask C: {family[member].selections[2]}\n",
+                f"{family[member].selections[2].details}"
+                ## End ESS-3
+                
+                "\nPlease make your selection here:",
                 forms['select_tasks'][0]+'\n',
                 'Best of Luck,',
                 'Your Secret Agent Santa Bot'
