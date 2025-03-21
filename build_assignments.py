@@ -60,10 +60,13 @@ if good_to_go:
         selection = selections.loc[selections['Who Are You?'] == member, 'Which of your tasks do you choose?'].values[0]
         if selection == 'Task A':
             family[member].tasks = [family[member].selections[0]]
+            family[member].selections[0].selected = True
         elif selection == 'Task B':
             family[member].tasks = [family[member].selections[1]]
+            family[member].selections[1].selected = True
         elif selection == 'Task C':
             family[member].tasks = [family[member].selections[2]]
+            family[member].selections[2].selected = True
         else:
             print('Something weird is up with task selection for ', member)
             family[member].tasks = [family[member].selections[2]]
