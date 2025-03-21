@@ -40,6 +40,13 @@ class mission(object):
 
 from random import shuffle
 
+def get_unused_tasks(family):
+    all_tasks = []
+    for n in family:
+        all_tasks += family[n].submissions
+
+    return [k for k in all_tasks if not k.selected]
+
 def read_form(url_in):
     url_use = url_in.replace('/edit#gid=', '/export?format=csv&gid=')
     if url_use == url_in:
