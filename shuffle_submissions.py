@@ -97,7 +97,7 @@ if good_to_go:
                         k += 1
                     ## End ESS-2
 
-                    if len(temp_submits) <= k and len(temp_selects) <3:
+                    if len(temp_submits) <= k and len(temp_selects) <3: #You've run out of options, restart
                         success = False
                         print('FAIL! Restarting')
                         for m in family:
