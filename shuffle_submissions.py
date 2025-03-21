@@ -64,9 +64,9 @@ if good_to_go:
         s = submissions.loc[submissions['Who Are You?'] == n, ['Mission 1 Title', 'Mission 1 Details',
                                                                 'Mission 2 Title', 'Mission 2 Details',
                                                                 'Mission 3 Title', 'Mission 3 Details']].values.flatten().tolist()
-        s1 = sas_utils.mission(s[0], s[1], n)
-        s2 = sas_utils.mission(s[2], s[3], n)
-        s3 = sas_utils.mission(s[4], s[5], n)
+        s1 = sas_utils.mission(s[0], s[1], n, n+'_1')
+        s2 = sas_utils.mission(s[2], s[3], n, n+'_2')
+        s3 = sas_utils.mission(s[4], s[5], n, n+'_3')
 
         ## End ESS-1
 
