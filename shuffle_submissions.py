@@ -59,7 +59,7 @@ if good_to_go:
         print('Gathering Submissions from ', n)
 
         ## ESS-1: Assume that "submissions" now includes a title and a description
-        ## TODO: We should make this not be a strict 3-mission list
+        ## NB: We should make this not be a strict 3-mission list
         #s = submissions.loc[submissions['Who Are You?'] == n, ['Secret Task 1', 'Secret Task 2', 'Secret Task 3']].values.flatten().tolist()
         s = submissions.loc[submissions['Who Are You?'] == n, ['Mission 1 Title', 'Mission 1 Details',
                                                                 'Mission 2 Title', 'Mission 2 Details',
