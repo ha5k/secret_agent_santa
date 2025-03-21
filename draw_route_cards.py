@@ -8,8 +8,21 @@ from time import time
 from random import shuffle
 
 ## Read In Form for Drawing Route Cards
+family, forms, facilitator = sas_utils.load_pickles()
+# route_requests = sas_utils.read_form(forms['draw_routes'][1])
 
- # If it has a new entry, assign that person a username and tasks to choose
+# If it has a new entry, assign that person a username and add them to the family
+for k in ranage(len(route_requests)):
+    name = route_requests['Who Are You'][k] + '_' + route_requests['Timestamp'][k]
+    email = route_requests['Email']
+    if name not in family:
+        family[name] = sas_utils.person(name, email, '', True)
+
+# Go through the assignment process to get the new requestors tasks
+
+
+
+
 
  # Email options and remove options from backup list
 
