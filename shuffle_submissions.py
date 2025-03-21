@@ -88,10 +88,15 @@ if good_to_go:
                 k = 0
                 temp_selects = []
                 while len(temp_selects) < 3:
-                    if temp_submits[k] not in family[member].submissions:
+                    ## ESS-2: Updated filter to catch when multiple selections are from the same submitter
+                    not_persons_task = temp_submits[k].id not in [s.id for s in family[member].submissions] #Task isn't submitted by that person
+                    not_multiples = temp_submits[k].submitter not in [s.submitter for s in temp_selects] #Task isn't multiple from someone
+                    if not_persons_task and not_multiples:
                         temp_selects.append(temp_submits.pop(k))
                     else:
                         k += 1
+                    ## End ESS-2
+
                     if len(temp_submits) <= k and len(temp_selects) <3:
                         success = False
                         print('FAIL! Restarting')
