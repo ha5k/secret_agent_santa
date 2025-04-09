@@ -42,6 +42,8 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                 f"{family[member].selections[2].details}"
                 ## End ESS-3
                 
+                '\nYou can also choose "I am Feeling Lucky." If you do, you will be assigned a random task that someone else turned down.'
+                
                 "\nPlease make your selection here:",
                 forms['select_tasks'][0]+'\n',
                 'Best of Luck,',
