@@ -68,11 +68,23 @@ if good_to_go:
             family[member].tasks = [family[member].selections[2]]
             family[member].selections[2].selected = True
         elif selection == 'I am Feeling Lucky':
-
+            family[member].feels_lucky = True
         else:
             print('Something weird is up with task selection for ', member)
             family[member].tasks = [family[member].selections[2]]
             family[member].selections[2].selected = True
+
+    # Handle the folks who feel lucky
+    for member in family:
+        if family[member].feels_lucky:
+            unused_tasks = sas_utils.get_unused_tasks(family)
+            k = 0
+            while k == 0 or (unused_tasks[k] in family[member].selections) :
+                k+=1
+            family[member].tasks = [unused_tasks[k]]
+            unused_tasks[k].selected = True
+
+
 
     # Make sure you reset old results if needed
     for member in family:
