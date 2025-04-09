@@ -67,6 +67,8 @@ if good_to_go:
         elif selection == 'Task C':
             family[member].tasks = [family[member].selections[2]]
             family[member].selections[2].selected = True
+        elif selection == 'I am Feeling Lucky':
+
         else:
             print('Something weird is up with task selection for ', member)
             family[member].tasks = [family[member].selections[2]]

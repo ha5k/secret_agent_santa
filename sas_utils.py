@@ -14,6 +14,7 @@ class person(object):
     is_agent = False
     gives_to = ''
     task_emailed = False
+    feels_lucky = False
 
     def __init__(self, name, email, partner, playing):
         self.name = name
