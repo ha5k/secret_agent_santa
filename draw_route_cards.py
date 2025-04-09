@@ -44,12 +44,12 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
             "You're a crazy person and asked for more tasks. It's too late to take it back now.\n",
             "The additional tasks you can choose from are:\n",
 
-            f"\nTask A: {family[member].selections[0].title}",
-            f"{family[member].selections[0].details}"
-            f"\nTask B: {family[member].selections[1].title}",
-            f"{family[member].selections[1].details}"
-            f"\nTask C: {family[member].selections[2]}\n",
-            f"{family[member].selections[2].details}"
+            f"\nTask A: {family[nr].selections[0].title}",
+            f"{family[nr].selections[0].details}"
+            f"\nTask B: {family[nr].selections[1].title}",
+            f"{family[nr].selections[1].details}"
+            f"\nTask C: {family[nr].selections[2]}\n",
+            f"{family[nr].selections[2].details}"
 
             f"When selecting your task, the form will ask for a secret code. Your secret code for this round of drawing route cards is:{nr}",
 
@@ -59,7 +59,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
             "\nBest of luck..."
             "Kringle. Kris Kringle"
         ])
-        server.sendmail(facilitator['email'], family[member].email,
+        server.sendmail(facilitator['email'], family[nr].email,
                         message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
                             '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
                             "\u2026", '...'))
@@ -98,25 +98,47 @@ for member in family:
     if family[member].is_agent:
         family[member].tasks += sas_routes
 
- # Email confirmation to the chooser
+# Email confirmation to the chooser
 
 with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     server.starttls()
     server.login(facilitator['email'], facilitator['pwd'])
 
-    subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Cards')
-    message = '\n'.join([
-        subject,
-        f"Hey there, {nr.split('_')[0]}\n",
-        "Congrats! You chose more tasks! Good luck with that.\n",
-        "The additional task you chose is:"
-        
+    for member in family:
+        if not family[member].tasks_emailed and not family[member].is_agent:
+            subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Confirmation')
+            message = '\n'.join([
+                subject,
+                f"Hey there, {member.split('_')[0]}\n",
+                "Congrats! You chose more tasks! Good luck with that.\n",
+                "The additional task you chose is:",
+                family[member].tasks[0].title + '\n'+ family[member].tasks[0].details,
+                "\nBest of luck..."
+                "Kringle. Kris Kringle"
+                ])
+            server.sendmail(facilitator['email'], family[member].email,
+                            message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
+                                '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
+                                "\u2026", '...'))
+            family[member].task_emailed = True
 
-        "\nBest of luck..."
-        "Kringle. Kris Kringle"
+        elif not family[member].tasks_emailed and family[member].is_agent:
+            subject = 'Subject: {}\n\n'.format('Someone Drew a Route Card...')
+            message = '\n'.join([
+                subject,
+                f"Hey there, {member}\n",
+                "I'm sorry to report that someone drew a route card. So now you have an extra task...\n",
+                "Your new list of tasks is:",
+                '\n ' + '\n'.join(['\n' + task.title + '\n' + task.details for task in family[member].tasks]),
+                "\nBest of luck..."
+                "Kringle. Kris Kringle"
+            ])
+            server.sendmail(facilitator['email'], family[member].email,
+                            message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
+                                '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
+                                "\u2026", '...'))
+            family[member].task_emailed = True
 
-
-
-    
-
- # Email the confirmed task to the secret agent
+## Save the new pickle file
+with open('family.pkl','wb') as f:
+    pickle.dump(family, f)
