@@ -22,7 +22,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
             print('\tWorking on: '+member)
             message = '\n\n'.join([subject,
                                    f'Hi {member}',
-                                   f'Please submit three tasks for the 2024 Edition of Secret Agent Santa at the following link:',
+                                   f'Please submit three tasks for the 2025 Edition of Secret Agent Santa at the following link:',
                                    forms['submit_tasks'][0],
                                    'Cheers,\nYour Secret Agent Santa Bot'
                                    ])

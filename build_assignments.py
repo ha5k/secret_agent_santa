@@ -70,6 +70,7 @@ if good_to_go:
         else:
             print('Something weird is up with task selection for ', member)
             family[member].tasks = [family[member].selections[2]]
+            family[member].selections[2].selected = True
 
     # Make sure you reset old results if needed
     for member in family:

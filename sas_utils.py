@@ -13,6 +13,7 @@ class person(object):
     tasks = []
     is_agent = False
     gives_to = ''
+    task_emailed = False
 
     def __init__(self, name, email, partner, playing):
         self.name = name

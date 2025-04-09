@@ -8,8 +8,8 @@ from time import time
 from random import shuffle
 
 ## Read In Form for Drawing Route Cards
-# family, forms, facilitator = sas_utils.load_pickles()
-# route_requests = sas_utils.read_form(forms['draw_routes'][1])
+family, forms, facilitator = sas_utils.load_pickles()
+route_requests = sas_utils.read_form(forms['draw_routes'][1])
 
 # If it has a new entry, assign that person a username and add them to the family
 for k in range(len(route_requests)):
@@ -51,18 +51,72 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
             f"\nTask C: {family[member].selections[2]}\n",
             f"{family[member].selections[2].details}"
 
-            f"When selecting your task, the form will ask for a username. Your username for this round of drawing route cards is:{nr}",
+            f"When selecting your task, the form will ask for a secret code. Your secret code for this round of drawing route cards is:{nr}",
 
             "\nPlease make your selection here:",
             forms['select_routes'][0] + '\n',
 
+            "\nBest of luck..."
+            "Kringle. Kris Kringle"
+        ])
+        server.sendmail(facilitator['email'], family[member].email,
+                        message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
+                            '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
+                            "\u2026", '...'))
+
         ## Read in form for selecting new route cards
 route_selections = sas_utils.read_form(forms['draw_routes'][1])
+sas_routes = []
 
+for member in route_selections['Secret Code'].tolist():
+        if len(family[member].tasks) == 0:
+            selection = route_selections.loc[route_selections['Secret Code'] == member, 'Which of your tasks do you choose?'].values[0]
 
+            if selection == 'Task A':
+                family[member].tasks.append([family[member].selections[0]])
+                family[member].selections[0].selected = True
+                sas_routes.append([family[member].selections[0]])
 
- # If it has an entry with assigned username and selection, confirm selection
+            elif selection == 'Task B':
+                family[member].tasks.append([family[member].selections[1]])
+                family[member].selections[1].selected = True
+                sas_routes.append([family[member].selections[1]])
+
+            elif selection == 'Task C':
+                family[member].tasks.append([family[member].selections[2]])
+                family[member].selections[2].selected = True
+                sas_routes.append([family[member].selections[2]])
+
+            else:
+                # print('Something weird is up with task selection for ', member)
+                family[member].tasks.append([family[member].selections[2]])
+                family[member].selections[2].selected = True
+                sas_routes.append([family[member].selections[2]])
+
+# Add task to the secret agent's list
+for member in family:
+    if family[member].is_agent:
+        family[member].tasks += sas_routes
 
  # Email confirmation to the chooser
+
+with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
+    server.starttls()
+    server.login(facilitator['email'], facilitator['pwd'])
+
+    subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Cards')
+    message = '\n'.join([
+        subject,
+        f"Hey there, {nr.split('_')[0]}\n",
+        "Congrats! You chose more tasks! Good luck with that.\n",
+        "The additional task you chose is:"
+        
+
+        "\nBest of luck..."
+        "Kringle. Kris Kringle"
+
+
+
+    
 
  # Email the confirmed task to the secret agent
