@@ -64,6 +64,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                         message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'").replace('\u2013', '-').replace('\xe9',"[e-with-an-accent]").replace("\u2026",'...'))
 
         print(f'\t...sent to {member} at {family[member].email}')
+        family[member].task_emailed = True
 
     print('Sending Secret Tasks Email')
     message = '\n'.join([
@@ -76,3 +77,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     server.sendmail(facilitator['email'], facilitator['email'],
                     message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'").replace('\u2013', '-').replace('\xe9',"[e-with-an-accent]").replace("\u2026",'...'))
     print('Ceremony Details Sent. Do not read them')
+
+## Save the new pickle file
+with open('family.pkl','wb') as f:
+    pickle.dump(family, f)
