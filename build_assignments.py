@@ -80,11 +80,9 @@ if good_to_go:
             unused_tasks = sas_utils.get_unused_tasks(family)
             k = 0
             while k == 0 or (unused_tasks[k] in family[member].selections) :
-                k+=1
+                k += 1
             family[member].tasks = [unused_tasks[k]]
             unused_tasks[k].selected = True
-
-
 
     # Make sure you reset old results if needed
     for member in family:
@@ -128,6 +126,7 @@ if good_to_go:
                 good_solution = False
                 break
     print('You did it!')
+
     ## Save a copy of the family pickle with task information
     with open('family.pkl','wb') as f:
         pickle.dump(family, f)
