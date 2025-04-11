@@ -53,6 +53,8 @@ def read_form(url_in):
     url_use = url_in.replace('/edit#gid=', '/export?format=csv&gid=')
     if url_use == url_in:
         url_use = url_in.replace('/edit?resourcekey#gid=', '/export?format=csv&gid=')
+    if url_use == url_in:
+        url_use = url_in.replace('/edit?gid=','/export?format=csv&gid=')
     return pd.read_csv(url_use)
 def load_pickles():
     with open('family.pkl', 'rb') as f:
