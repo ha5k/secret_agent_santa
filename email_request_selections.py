@@ -36,9 +36,9 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                 ## ESS-3: Updated to pull titles and details separately from new mission class
                 f"\nTask A: {family[member].selections[0].title}",
                 f"{family[member].selections[0].details}"
-                f"\nTask B: {family[member].selections[1].title}",
+                f"\n\nTask B: {family[member].selections[1].title}",
                 f"{family[member].selections[1].details}"
-                f"\nTask C: {family[member].selections[2].title}\n",
+                f"\n\nTask C: {family[member].selections[2].title}\n",
                 f"{family[member].selections[2].details}"
                 ## End ESS-3
                 
