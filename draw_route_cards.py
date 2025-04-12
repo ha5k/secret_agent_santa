@@ -19,20 +19,22 @@ for k in range(len(route_requests)):
         family[name] = sas_utils.person(name, email, '', True)
 
 # Go through the assignment process to get the new requesters tasks
-unused_tasks = sas_utils.get_unused_tasks(family)
-shuffle(unused_tasks)
+
 
 send_routes_to = []
+print(send_routes_to)
 for nr in family:
-    if len(family[nr].selections) == 0:
-        print('Hey')
-        print(send_routes_to)
+    print(nr)
+    unused_tasks = sas_utils.get_unused_tasks(family)
+    shuffle(unused_tasks)
+    if len(family[nr].selections) == 0 and family[nr].playing:
         send_routes_to.append(nr)
-        print('Ho')
-        print(send_routes_to)
-        for k in range(min(3, len(unused_tasks))):
-            family[nr].selections.append(unused_tasks.pop(0))
-            family[nr].selections[-1].selected = True
+        family[nr].selections = [unused_tasks[k] for k in range(min(3, len(unused_tasks)))]
+        for k in family[nr].selections:
+            k.selected = True
+            print([len(family[k].selections) for k in family])
+            print(family[list(family)[-1]].selections)
+
 
  # Email options and remove options from backup list
 
@@ -50,9 +52,9 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
 
             f"\nTask A: {family[nr].selections[0].title}",
             f"{family[nr].selections[0].details}"
-            f"\nTask B: {family[nr].selections[1].title}",
+            f"\n\nTask B: {family[nr].selections[1].title}",
             f"{family[nr].selections[1].details}"
-            f"\nTask C: {family[nr].selections[2].title}\n",
+            f"\n\nTask C: {family[nr].selections[2].title}\n",
             f"{family[nr].selections[2].details}"
 
             f"When selecting your task, the form will ask for a secret code. Your secret code for this round of drawing route cards is:{nr}",
@@ -60,7 +62,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
             "\nPlease make your selection here:",
             forms['select_routes'][0] + '\n',
 
-            "\nBest of luck..."
+            "\nBest of luck...",
             "Kringle. Kris Kringle"
         ])
         server.sendmail(facilitator['email'], family[nr].email,
