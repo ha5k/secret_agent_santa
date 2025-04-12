@@ -1,8 +1,17 @@
 
-        ## Read in form for selecting new route cards
-route_selections = sas_utils.read_form(forms['draw_routes'][1])
-sas_routes = []
+import pandas as pd
+import smtplib
+import pickle
+import numpy as np
+import sas_utils
+from time import time
+from random import shuffle
 
+## Read In Form for Drawing Route Cards
+family, forms, facilitator = sas_utils.load_pickles()
+route_selections = sas_utils.read_form(forms['draw_routes'][1])
+
+sas_routes = []
 for member in route_selections['Secret Code'].tolist():
         if len(family[member].tasks) == 0 and family[member].playing:
             selection = route_selections.loc[route_selections['Secret Code'] == member, 'Which of your tasks do you choose?'].values[0]

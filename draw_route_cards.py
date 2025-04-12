@@ -13,7 +13,7 @@ route_requests = sas_utils.read_form(forms['draw_routes'][1])
 
 # If it has a new entry, assign that person a username and add them to the family
 for k in range(len(route_requests)):
-    name = route_requests['Who Are You?'][k] + '_Bonus_' + route_requests['Timestamp'][k].replace(':','').replace(' ','').replace('/','')
+    name = route_requests['Who Are You?'][k] + route_requests['Timestamp'][k].replace(':','').replace(' ','').replace('/','')
     email = route_requests['What is Your Email?'][k]
     if name not in family:
         family[name] = sas_utils.person(name, email, '', True)
@@ -55,9 +55,9 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
             f"\n\nTask B: {family[nr].selections[1].title}",
             f"{family[nr].selections[1].details}"
             f"\n\nTask C: {family[nr].selections[2].title}\n",
-            f"{family[nr].selections[2].details}"
+            f"{family[nr].selections[2].details}",
 
-            f"When selecting your task, the form will ask for a secret code. Your secret code for this round of drawing route cards is:{nr}",
+            f"When selecting your task, the form will ask for a secret code. Your secret code for this round of drawing route cards is: {nr}",
 
             "\nPlease make your selection here:",
             forms['select_routes'][0] + '\n',
