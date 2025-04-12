@@ -13,10 +13,12 @@ route_requests = sas_utils.read_form(forms['draw_routes'][1])
 
 # If it has a new entry, assign that person a username and add them to the family
 for k in range(len(route_requests)):
-    name = route_requests['Who Are You?'][k] + '_Bonus_' + route_requests['Timestamp'][k]
+    name = route_requests['Who Are You?'][k] + '_Bonus_' + route_requests['Timestamp'][k].replace(':','').replace(' ','').replace('/','')
     email = route_requests['What is Your Email?'][k]
+    print(family[name].selections)
     if name not in family:
         family[name] = sas_utils.person(name, email, '', True)
+        print(family[name].selections)
 
 # Go through the assignment process to get the new requesters tasks
 unused_tasks = sas_utils.get_unused_tasks(family)
@@ -25,8 +27,12 @@ shuffle(unused_tasks)
 send_routes_to = []
 for nr in family:
     if len(family[nr].selections) == 0:
+        print('Hey')
+        print(send_routes_to)
         send_routes_to.append(nr)
-        for k in min(3, len(unused_tasks)):
+        print('Ho')
+        print(send_routes_to)
+        for k in range(min(3, len(unused_tasks))):
             family[nr].selections.append(unused_tasks.pop(0))
             family[nr].selections[-1].selected = True
 
@@ -69,7 +75,7 @@ route_selections = sas_utils.read_form(forms['draw_routes'][1])
 sas_routes = []
 
 for member in route_selections['Secret Code'].tolist():
-        if len(family[member].tasks) == 0:
+        if len(family[member].tasks) == 0 and family[member].playing:
             selection = route_selections.loc[route_selections['Secret Code'] == member, 'Which of your tasks do you choose?'].values[0]
 
             if selection == 'Task A':
@@ -105,7 +111,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
     server.login(facilitator['email'], facilitator['pwd'])
 
     for member in family:
-        if not family[member].tasks_emailed and not family[member].is_agent:
+        if not family[member].task_emailed and not family[member].is_agent and family[member].playing:
             subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Confirmation')
             message = '\n'.join([
                 subject,
@@ -122,7 +128,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                                 "\u2026", '...'))
             family[member].task_emailed = True
 
-        elif not family[member].tasks_emailed and family[member].is_agent:
+        elif not family[member].task_emailed and family[member].is_agent and family[member].playing:
             subject = 'Subject: {}\n\n'.format('Someone Drew a Route Card...')
             message = '\n'.join([
                 subject,

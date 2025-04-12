@@ -13,7 +13,7 @@ is_a_test = input("Type 'y' to confirm this is not a test: ")
 
 # LOAD IN FAMILY AND FORM INFORMATION, THEN READ IN RESPONSES
 family, forms, facilitator = sas_utils.load_pickles()
-selections = sas_utils.read_form(forms['select_tasks'][1])
+selections = sas_utils.read_form(forms['select_tasks'][1]).dropna()
 responses_expected = len([family[member] for member in family if family[member].playing])  # no. of expected responses
 
 
@@ -74,13 +74,17 @@ if good_to_go:
             family[member].tasks = [family[member].selections[2]]
             family[member].selections[2].selected = True
 
+
     # Handle the folks who feel lucky
     for member in family:
         if family[member].feels_lucky:
             unused_tasks = sas_utils.get_unused_tasks(family)
+
             k = 0
-            while k == 0 or (unused_tasks[k] in family[member].selections) :
-                k += 1
+
+            ## Uncomment this block if you don't want "I'm feeling Lucky" to get their own task
+            # while k == 0 or (unused_tasks[k] in family[member].submissions):
+            #     k += 1
             family[member].tasks = [unused_tasks[k]]
             unused_tasks[k].selected = True
 
