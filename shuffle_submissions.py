@@ -80,7 +80,7 @@ if good_to_go:
         unique_id = randint(1000, 9999)
         while unique_id in unique_ids:
             unique_id = randint(1000, 9999)
-        unique_ids.append(unique_id)
+        unique_ids.append(str(unique_id))
         t.id = unique_id
 
     #Save a pkl for all the tasks that have been submitted
@@ -101,6 +101,7 @@ if good_to_go:
                 k = 0
                 temp_selects = []
                 while len(temp_selects) < 3:
+
                     ## ESS-2: Updated filter to catch when multiple selections are from the same submitter
                     not_persons_task = temp_submits[k].id not in [s.id for s in family[member].submissions] #Task isn't submitted by that person
                     not_multiples = temp_submits[k].submitter not in [s.submitter for s in temp_selects] #Task isn't multiple from someone

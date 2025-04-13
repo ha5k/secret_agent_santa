@@ -81,7 +81,6 @@ if good_to_go:
             unused_tasks = sas_utils.get_unused_tasks(family)
 
             k = 0
-
             ## Uncomment this block if you don't want "I'm feeling Lucky" to get their own task
             # while k == 0 or (unused_tasks[k] in family[member].submissions):
             #     k += 1
