@@ -73,7 +73,9 @@ if good_to_go:
         all_submissions += [s1, s2, s3]
         family[n].submissions = [s1, s2, s3]
 
+    #Save a pkl for all the tasks that have been submitted
     tasks = sas_utils.save_tasks(all_submissions)
+
 
     for member in family:
         if len(family[member].submissions) != 3 and family[member].playing:
