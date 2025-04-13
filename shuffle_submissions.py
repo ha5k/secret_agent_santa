@@ -65,9 +65,9 @@ if good_to_go:
         s = submissions.loc[submissions['Who Are You?'] == n, ['Mission 1 Title', 'Mission 1 Details',
                                                                'Mission 2 Title', 'Mission 2 Details',
                                                                'Mission 3 Title', 'Mission 3 Details']].values.flatten().tolist()
-        s1 = sas_utils.mission(s[0], s[1], n, n+'_1')
-        s2 = sas_utils.mission(s[2], s[3], n, n+'_2')
-        s3 = sas_utils.mission(s[4], s[5], n, n+'_3')
+        s1 = sas_utils.mission(s[0], s[1], n)
+        s2 = sas_utils.mission(s[2], s[3], n)
+        s3 = sas_utils.mission(s[4], s[5], n)
 
         ## End ESS-1
 
@@ -77,17 +77,14 @@ if good_to_go:
     #Assign a unique id to each submitted task
     unique_ids = []
     for t in all_submissions:
-        id = randint(1000, 9999)
-        while id in unique_ids:
-            id = randint(1000, 9999)
-        unique_ids.append(id)
-        t.id = id
-
-
+        unique_id = randint(1000, 9999)
+        while unique_id in unique_ids:
+            unique_id = randint(1000, 9999)
+        unique_ids.append(unique_id)
+        t.id = unique_id
 
     #Save a pkl for all the tasks that have been submitted
     tasks = sas_utils.save_tasks(all_submissions)
-
 
     for member in family:
         if len(family[member].submissions) != 3 and family[member].playing:
