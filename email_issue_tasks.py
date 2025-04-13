@@ -43,7 +43,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                 preface = f'You have been randomly assigned to get a present for {family[member].gives_to}\n\nAlso... ' +preface
         elif family[member].playing:
             task_string = 'You are NOT the Secret Agent, but still have to ' \
-                          'complete the mission you selected:\n- ' + family[member].tasks[0].title + '\n'+ family[member].tasks[0].details
+                          'complete the mission you selected:\n- ' + family[member].tasks[0].title + '\n'+ family[member].tasks[0].details + '\nTask ID: '+family[member].tasks[0].id
             preface = f'You have been randomly assigned to get a present for {family[member].gives_to}\n\nAlso...'
         else:
             task_string = 'You have opted out of the agency this year. Probably wise!'
