@@ -6,8 +6,8 @@ import sas_utils
 import random
 from time import time
 
-sas_gets_present = True  # Toggle whether the secret agent is also part of secret santa
-personae_non_grata = []  # List of people not eligible for being the secret agent
+sas_gets_present = True       # Toggle whether the secret agent is also part of secret santa
+personae_non_grata = ['Dad']  # List of people not eligible for being the secret agent
 is_a_test = input("Type 'y' to confirm this is not a test: ")
 
 
@@ -18,7 +18,6 @@ responses_expected = len([family[member] for member in family if family[member].
 
 
 # MAKE SURE YOU HAVE ENOUGH RESPONSES
-
 good_to_go = True
 if len(selections.drop_duplicates(subset='Who Are You?')) < responses_expected:
     print("You're missing responses from someone in the family")
