@@ -7,6 +7,7 @@ import numpy as np
 import sas_utils
 from time import time
 from random import shuffle
+from random import randint
 
 
 
@@ -72,6 +73,17 @@ if good_to_go:
 
         all_submissions += [s1, s2, s3]
         family[n].submissions = [s1, s2, s3]
+
+    #Assign a unique id to each submitted task
+    unique_ids = []
+    for t in all_submissions:
+        id = randint(1000, 9999)
+        while id in unique_ids:
+            id = randint(1000, 9999)
+        unique_ids.append(id)
+        t.id = id
+
+
 
     #Save a pkl for all the tasks that have been submitted
     tasks = sas_utils.save_tasks(all_submissions)
