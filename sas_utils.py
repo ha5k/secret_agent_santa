@@ -29,11 +29,10 @@ class mission(object):
     id = ''
     selected = False
 
-    def __init__(self, title, details, submitter,id):
+    def __init__(self, title, details, submitter):
         self.title = title
         self.details = details
         self.submitter = submitter
-        self.id = id
         self.selected = False
 
 
