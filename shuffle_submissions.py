@@ -62,8 +62,8 @@ if good_to_go:
         ## NB: We should make this not be a strict 3-mission list
         #s = submissions.loc[submissions['Who Are You?'] == n, ['Secret Task 1', 'Secret Task 2', 'Secret Task 3']].values.flatten().tolist()
         s = submissions.loc[submissions['Who Are You?'] == n, ['Mission 1 Title', 'Mission 1 Details',
-                                                                'Mission 2 Title', 'Mission 2 Details',
-                                                                'Mission 3 Title', 'Mission 3 Details']].values.flatten().tolist()
+                                                               'Mission 2 Title', 'Mission 2 Details',
+                                                               'Mission 3 Title', 'Mission 3 Details']].values.flatten().tolist()
         s1 = sas_utils.mission(s[0], s[1], n, n+'_1')
         s2 = sas_utils.mission(s[2], s[3], n, n+'_2')
         s3 = sas_utils.mission(s[4], s[5], n, n+'_3')

@@ -71,7 +71,7 @@ with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         'subject: SECRET TASK LIST DETAILS FOR CEREMONY',
         '\n'.join(['THISISASECRETTHISISASECRETTHISISASECRET' for k in range(5)]),
         'THE SECRET TASKS ARE:',
-        '\t' + '\n\t'.join([k.title for k in sas_tasks]),
+        '\t' + '\n\t'.join([k.title + '\n' + k.details for k in sas_tasks]),
         '\nGood Luck'
     ])
     server.sendmail(facilitator['email'], facilitator['email'],
