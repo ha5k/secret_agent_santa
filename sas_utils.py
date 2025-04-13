@@ -101,3 +101,12 @@ def too_many_responses(submissions, family):
         submissions.drop_duplicates(subset = 'Who Are You?', keep = 'last', inplace = True)
 
     return submissions
+
+
+## SUBMITTED TASKS
+ # Reads in the tasks that are submitted by family members for shuffling and selecting
+def save_tasks(target):
+    tasks = sas_utils.read_form(target)
+    with open('submitted_tasks.pkl','wb') as f:
+        pickle.dump(tasks, f, protocol=pickle.HIGHEST_PROTOCOL)
+    return tasks
