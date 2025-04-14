@@ -2,6 +2,7 @@
  # Every script runs as an import and saves data as a pkl... for some reason
 
 import sas_utils
+import pickle
 family, forms, facilitator = sas_utils.load_pickles()
 
 # If game hasn't started, send out the first batch of emails
@@ -30,6 +31,9 @@ elif facilitator['game_state'] == 'Run Game':
     exec(open('select_route_cards.py').read())
     import run_messages
     exec(open('run_messages.py').read())
+
+with open('facilitator_details.pkl', 'wb') as f:
+    pickle.dump(facilitator, f)
 
 
 
