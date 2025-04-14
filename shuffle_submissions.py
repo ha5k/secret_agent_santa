@@ -84,7 +84,7 @@ if good_to_go:
         t.id = unique_id
 
     #Save a pkl for all the tasks that have been submitted
-    tasks = sas_utils.save_tasks(all_submissions)
+    tasks = sas_utils.build_tasks(all_submissions)
 
     for member in family:
         if len(family[member].submissions) != 3 and family[member].playing:

@@ -8,7 +8,7 @@ from time import time
 from random import shuffle
 
 ## Read In Form for Drawing Route Cards
-# family, forms, facilitator = sas_utils.load_pickles()
+family, forms, facilitator = sas_utils.load_pickles()
 tasks = sas_utils.load_tasks()
 mc = sas_utils.read_form(forms['message_center'][1])
 
@@ -23,6 +23,8 @@ if len(mc) > facilitator['messages_sent']:
             task = r[1]["What is the Task ID? (It's a four digit number)"]
             m = r[1]["What message are you sending? "]
 
+            print(task, m)
+
             send_to = []
             for member in family:
                 st = False
@@ -32,7 +34,7 @@ if len(mc) > facilitator['messages_sent']:
                 for f in family[member].selections:
                     if f.id == task:
                         send_to.append(member)
-
+            print('Hey')
             with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
                 server.starttls()
                 server.login(facilitator['email'], facilitator['pwd'])
@@ -42,13 +44,13 @@ if len(mc) > facilitator['messages_sent']:
                     message = '\n'.join([
                         subject,
                         f"Hey there, {member}\n",
-                        "Somebody asked a question or sent a message about a task. You're either doing that task or submitted it.\n",
+                        "Somebody asked a question or sent a message about a task. You're either doing that task or submitted it!\n",
 
-                        f"The task in question is Task ID {task}",
-                        f"The task is:{tasks[task].title}",
+                        f"The task in question is Task ID: {task}",
+                        f"The task is: {tasks[task].title}",
                         f"{tasks[task].details}",
 
-                        f"\n The question is...",
+                        f"\nThe question is...",
                         f"{m}",
 
                         "\nYou can respond to this message at the link below:",
