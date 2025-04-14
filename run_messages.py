@@ -9,8 +9,12 @@ from random import shuffle
 
 ## Read In Form for Drawing Route Cards
 family, forms, facilitator = sas_utils.load_pickles()
-tasks = sas_utils.load_tasks()
 mc = sas_utils.read_form(forms['message_center'][1])
+
+tasks = {}
+for member in family:
+    for t in family[member].submissions:
+        tasks[t.id] = t
 
 ## Check whether you have new messages
 if len(mc) > facilitator['messages_sent']:

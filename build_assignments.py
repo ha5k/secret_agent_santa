@@ -8,13 +8,13 @@ from time import time
 
 if __name__ == "__main__":
 
-    sas_gets_present = True       # Toggle whether the secret agent is also part of secret santa
-    personae_non_grata = ['Dad']  # List of people not eligible for being the secret agent
-    is_a_test = input("Type 'y' to confirm this is not a test: ")
-
-
     # LOAD IN FAMILY AND FORM INFORMATION, THEN READ IN RESPONSES
     family, forms, facilitator = sas_utils.load_pickles()
+
+    sas_gets_present = facilitator['sas_gets_present']  # Toggle whether the secret agent is also part of secret santa
+    personae_non_grata = facilitator['personae_non_grata']   # List of people not eligible for being the secret agent
+    is_a_test = facilitator['is_test']
+
     selections = sas_utils.read_form(forms['select_tasks'][1]).dropna()
     responses_expected = len([family[member] for member in family if family[member].playing])  # no. of expected responses
 
