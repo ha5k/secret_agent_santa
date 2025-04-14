@@ -132,7 +132,7 @@ if __name__ == "__main__":
         print('You did it!')
 
         ## Save a copy of the family pickle with task information
-        with open('family.pkl','wb') as f:
+        with open('family.pkl', 'wb') as f:
             pickle.dump(family, f)
 
 
