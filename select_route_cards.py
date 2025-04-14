@@ -88,7 +88,22 @@ if __name__ == "__main__":
                                 message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
                                     '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
                                     "\u2026", '...'))
-                family[member].task_emailed = True
+
+                subject = 'Subject: {}\n\n'.format('Someone Drew a Route Card...')
+                message = '\n'.join([
+                    subject,
+                    f"THISISSECRETTHISISSECRETTHISISSECRETTHISISSECRETTHISISSECRETTHISISSECRETTHISISSECRETTHISISSECRET\n, {sas}\n",
+                    "I'm sorry to report that someone drew a route card. So now you have an extra task...\n",
+                    "Your new list of tasks is:",
+                    '\n ' + '\n'.join(['\n' + task.title + '\n' + task.details for task in family[sas].tasks]),
+                    "\nBest of luck..."
+                    "Kringle. Kris Kringle"
+                ])
+                server.sendmail(facilitator['email'], family[sas].email,
+                                message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
+                                    '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
+                                    "\u2026", '...'))
+
 
     ## Save the new pickle file
     with open('family.pkl','wb') as f:

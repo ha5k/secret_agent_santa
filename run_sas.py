@@ -1,13 +1,7 @@
 ### This script is designed to run everything else as a single function.
+ # Every script runs as an import and saves data as a pkl... for some reason
 
-import pandas as pd
-import smtplib
-import pickle
-import numpy as np
 import sas_utils
-from time import time
-from random import shuffle
-
 family, forms, facilitator = sas_utils.load_pickles()
 
 # If game hasn't started, send out the first batch of emails
@@ -24,7 +18,9 @@ elif facilitator['game_state'] == 'Get Selections':
     import email_issue_tasks
 
 elif facilitator['game_state'] == 'Run Game':
-
+    import draw_route_cards
+    import select_route_cards
+    import run_messages
 
 
 
