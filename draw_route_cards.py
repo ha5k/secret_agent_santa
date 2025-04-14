@@ -18,6 +18,7 @@ if __name__ == "__main__":
         name = route_requests['Who Are You?'][k] + route_requests['Timestamp'][k].replace(':','').replace(' ','').replace('/','')
         email = route_requests['What is Your Email?'][k]
         if name not in family:
+            print('Someone drew route cards!')
             family[name] = sas_utils.person(name, email, '', True)
 
     # Go through the assignment process to get the new requesters tasks

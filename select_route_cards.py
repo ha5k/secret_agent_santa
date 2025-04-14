@@ -16,6 +16,7 @@ if __name__ == "__main__":
     sas_routes = []
     for member in route_selections['Secret Code'].tolist():
             if len(family[member].tasks) == 0 and family[member].playing:
+                print('Someone selected Route Cards!')
                 selection = route_selections.loc[route_selections['Secret Code'] == member, 'Which of your tasks do you choose?'].values[0]
 
                 if selection == 'Task A':

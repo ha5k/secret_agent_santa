@@ -20,6 +20,7 @@ if __name__ == "__main__":
 
     ## Check whether you have new messages
     if len(mc) > facilitator['messages_sent']:
+        print('There are new messages!')
         k = 0
         ## iterate through every row of the messages
         for r in mc.iterrows():
