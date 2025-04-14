@@ -107,7 +107,7 @@ def too_many_responses(submissions, family):
 ## SUBMITTED TASKS
  # Reads in the tasks taat are submitted by family members for shuffling and selecting
 
-def build_tasks(target)
+def build_tasks(target):
     output = {}
     for t in target:
         output[t.id] = t
