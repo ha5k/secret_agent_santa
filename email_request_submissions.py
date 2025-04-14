@@ -34,6 +34,6 @@ if __name__ == "__main__":
         print('Done requesting submissions!')
 
         facilitator['game_state'] = 'Get Selections'
-        with open('facilitator_details.pkl','wb') as f:
+        with open('facilitator_details.pkl', 'wb') as f:
             pickle.dump(facilitator, f)
 
