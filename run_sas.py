@@ -18,11 +18,14 @@ if facilitator['game_state'] == 'Not Started':
 elif facilitator['game_state'] == 'Get Submissions':
     import shuffle_submissions
     import email_request_selections
-    facilitator['game_state'] == 'Get Selections'
 
 elif facilitator['game_state'] == 'Get Selections':
     import build_assignments
-    facil
+    import email_issue_tasks
+
+elif facilitator['game_state'] == 'Run Game':
+
+
 
 
 
