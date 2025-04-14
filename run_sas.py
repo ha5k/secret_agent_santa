@@ -10,21 +10,23 @@ if facilitator['game_state'] == 'Not Started':
     print('Emailing to Request Submissions')
     # import email_request_submissions
     exec(open('email_request_submissions.py').read())
-    facilitator['game_state'] = 'Get Submissions'
 
 elif facilitator['game_state'] == 'Get Submissions':
+    print('Pulling submissions and requesting selections')
     import shuffle_submissions
     exec(open('shuffle_submissions.py').read())
     import email_request_selections
-    exec(open('email_request_submissions.py').read())
+    exec(open('email_request_selections.py').read())
 
 elif facilitator['game_state'] == 'Get Selections':
+    print('Pulling selections and starting the game')
     import build_assignments
     exec(open('build_assignments.py').read())
     import email_issue_tasks
-    exec(open('email_request_submissions.py').read())
+    exec(open('email_issue_tasks.py').read())
 
 elif facilitator['game_state'] == 'Run Game':
+    print('Running the game')
     import draw_route_cards
     exec(open('draw_route_cards.py').read())
     import select_route_cards
