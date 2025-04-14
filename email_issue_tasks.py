@@ -59,7 +59,8 @@ if __name__ == "__main__":
                 'HO HO HO,',
                 'Your Secret Agent Santa Bot'
             ])
-            server.sendmail(facilitator['email'], family[member].email,
+            if facilitator['send_emails']:
+                server.sendmail(facilitator['email'], family[member].email,
                             message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'").replace('\u2013', '-').replace('\xe9',"[e-with-an-accent]").replace("\u2026",'...'))
 
             print(f'\t...sent to {member} at {family[member].email}')
@@ -73,7 +74,8 @@ if __name__ == "__main__":
             '\t' + '\n\t'.join([k.title + '\n' + k.details + '\nTask ID: '+k.id for k in sas_tasks]),
             '\nGood Luck'
         ])
-        server.sendmail(facilitator['email'], facilitator['email'],
+        if facilitator['send_emails']:
+            server.sendmail(facilitator['email'], facilitator['email'],
                         message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'").replace('\u2013', '-').replace('\xe9',"[e-with-an-accent]").replace("\u2026",'...'))
         print('Ceremony Details Sent. Do not read them')
 

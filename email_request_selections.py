@@ -52,7 +52,8 @@ if __name__ == "__main__":
                     'Your Secret Agent Santa Bot'
                 ])
 
-                server.sendmail(facilitator['email'], family[member].email,
+                if facilitator['send_emails']:
+                    server.sendmail(facilitator['email'], family[member].email,
                                 message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'").replace('\u2013', '-').replace('\xe9',"[e-with-an-accent]").replace("\u2026",'...'))
                 ## TODO This unicode replacement is rough. Consider fixing.
 

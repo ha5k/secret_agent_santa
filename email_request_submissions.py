@@ -28,7 +28,8 @@ if __name__ == "__main__":
                                        forms['submit_tasks'][0],
                                        'Cheers,\nYour Secret Agent Santa Bot'
                                        ])
-                server.sendmail(facilitator['email'], family[member].email, message)
+                if facilitator['send_emails']:
+                    server.sendmail(facilitator['email'], family[member].email, message)
             else:
                 print('\tSkipping ' + member + " because they're lame")
         print('Done requesting submissions!')
