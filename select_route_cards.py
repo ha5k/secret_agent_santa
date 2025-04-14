@@ -99,12 +99,12 @@ if __name__ == "__main__":
                     "\nBest of luck..."
                     "Kringle. Kris Kringle"
                 ])
-                server.sendmail(facilitator['email'], family[sas].email,
+                server.sendmail(facilitator['email'], 'asai.secret.agent.santa@gmail.com',
                                 message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
                                     '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
                                     "\u2026", '...'))
 
 
     ## Save the new pickle file
-    with open('family.pkl','wb') as f:
+    with open('family.pkl', 'wb') as f:
         pickle.dump(family, f)
