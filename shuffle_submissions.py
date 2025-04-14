@@ -78,7 +78,7 @@ if __name__ == "__main__":
             while unique_id in unique_ids:
                 unique_id = randint(1000, 9999)
             unique_ids.append(str(unique_id))
-            t.id = unique_id
+            t.id = str(unique_id)
 
         #Save a pkl for all the tasks that have been submitted
         tasks = sas_utils.build_tasks(all_submissions)
@@ -120,4 +120,8 @@ if __name__ == "__main__":
         print('You should be good to go! Saving family pickle...')
         with open('family.pkl', 'wb') as f:
             pickle.dump(family, f)
+
+        facilitator['game_state'] = 'Shuffled_submissions'
+        with open('facilitator_details.pkl','wb') as f:
+            pickle.dump(facilitator, f)
 

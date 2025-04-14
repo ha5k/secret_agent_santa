@@ -58,6 +58,6 @@ if __name__ == "__main__":
                 ## TODO This unicode replacement is rough. Consider fixing.
 
         facilitator['game_state'] = 'Run Game'
-        with open('facilitator_details.pkl','wb') as f:
+        with open('facilitator_details.pkl', 'wb') as f:
             pickle.dump(facilitator, f)
 

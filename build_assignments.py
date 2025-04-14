@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     if good_to_go:
         print("It's happening. You should be good to go")
-        cnfrm = input("Do you want to continue? There's no turning back from here... (y/n)")
+        cnfrm = input("Do you want to continue? There's no turning back from here... (y/n) ")
         if cnfrm != 'y':
             print("Bailing out!")
             good_to_go = False

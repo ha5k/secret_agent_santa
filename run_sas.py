@@ -8,13 +8,13 @@ family, forms, facilitator = sas_utils.load_pickles()
 # If game hasn't started, send out the first batch of emails
 if facilitator['game_state'] == 'Not Started':
     print('Emailing to Request Submissions')
-    # import email_request_submissions
     exec(open('email_request_submissions.py').read())
 
 elif facilitator['game_state'] == 'Get Submissions':
     print('Pulling submissions and requesting selections')
-    import shuffle_submissions
     exec(open('shuffle_submissions.py').read())
+
+elif facilitator['game_state'] == 'Shuffled_submissions':
     import email_request_selections
     exec(open('email_request_selections.py').read())
 
