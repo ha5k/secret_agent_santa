@@ -1,0 +1,14 @@
+### This script is designed to run everything else as a single function.
+
+import pandas as pd
+import smtplib
+import pickle
+import numpy as np
+import sas_utils
+from time import time
+from random import shuffle
+
+family, forms, facilitator = sas_utils.load_pickles()
+
+# If game hasn't started, send out the first batch of emails
+if facilitator['game_state'] == 'Not Started'
