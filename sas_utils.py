@@ -53,6 +53,8 @@ def read_form(url_in):
     if url_use == url_in:
         url_use = url_in.replace('/edit?resourcekey#gid=', '/export?format=csv&gid=')
     if url_use == url_in:
+        url_use = url_in.replace('/edit?resourcekey=&gid=', '/export?format=csv&gid=')
+    if url_use == url_in:
         url_use = url_in.replace('/edit?gid=','/export?format=csv&gid=')
     return pd.read_csv(url_use)
 def load_pickles():
@@ -107,4 +109,9 @@ def too_many_responses(submissions, family):
 def save_tasks(target):
     with open('tasks.pkl','wb') as f:
         pickle.dump(target, f, protocol=pickle.HIGHEST_PROTOCOL)
+    return target
+
+def load_tasks():
+    with open('tasks.pkl', 'rb') as f:
+        target = pickle.load(f)
     return target
