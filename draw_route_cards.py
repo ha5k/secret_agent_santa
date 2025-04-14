@@ -7,138 +7,71 @@ import sas_utils
 from time import time
 from random import shuffle
 
-## Read In Form for Drawing Route Cards
-family, forms, facilitator = sas_utils.load_pickles()
-route_requests = sas_utils.read_form(forms['draw_routes'][1])
 
-# If it has a new entry, assign that person a username and add them to the family
-for k in range(len(route_requests)):
-    name = route_requests['Who Are You?'][k] + '_Bonus_' + route_requests['Timestamp'][k]
-    email = route_requests['Email']
-    if name not in family:
-        family[name] = sas_utils.person(name, email, '', True)
+if __name__ == "__main__":
+    ## Read In Form for Drawing Route Cards
+    family, forms, facilitator = sas_utils.load_pickles()
+    route_requests = sas_utils.read_form(forms['draw_routes'][1])
 
-# Go through the assignment process to get the new requesters tasks
-unused_tasks = sas_utils.get_unused_tasks(family)
-shuffle(unused_tasks)
+    # If it has a new entry, assign that person a username and add them to the family
+    for k in range(len(route_requests)):
+        name = route_requests['Who Are You?'][k] + route_requests['Timestamp'][k].replace(':','').replace(' ','').replace('/','')
+        email = route_requests['What is Your Email?'][k]
+        if name not in family:
+            family[name] = sas_utils.person(name, email, '', True)
 
-send_routes_to = []
-for nr in family:
-    if len(family[nr].selections) == 0:
-        send_routes_to.append(nr)
-        for k in min(3, len(unused_tasks)):
-            family[nr].selections.append(unused_tasks.pop(0))
-            family[nr].selections[-1].selected = True
+    # Go through the assignment process to get the new requesters tasks
 
- # Email options and remove options from backup list
 
-with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
-    server.starttls()
-    server.login(facilitator['email'], facilitator['pwd'])
+    send_routes_to = []
+    print(send_routes_to)
+    for nr in family:
+        print(nr)
+        unused_tasks = sas_utils.get_unused_tasks(family)
+        shuffle(unused_tasks)
+        if len(family[nr].selections) == 0 and family[nr].playing:
+            send_routes_to.append(nr)
+            family[nr].selections = [unused_tasks[k] for k in range(min(3, len(unused_tasks)))]
+            for k in family[nr].selections:
+                k.selected = True
+                print([len(family[k].selections) for k in family])
+                print(family[list(family)[-1]].selections)
 
-    for nr in send_routes_to:
-        subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Cards')
-        message = '\n'.join([
-            subject,
-            f"Hey there, {nr.split('_')[0]}\n",
-            "You're a crazy person and asked for more tasks. It's too late to take it back now.\n",
-            "The additional tasks you can choose from are:\n",
 
-            f"\nTask A: {family[nr].selections[0].title}",
-            f"{family[nr].selections[0].details}"
-            f"\nTask B: {family[nr].selections[1].title}",
-            f"{family[nr].selections[1].details}"
-            f"\nTask C: {family[nr].selections[2]}\n",
-            f"{family[nr].selections[2].details}"
+     # Email options and remove options from backup list
 
-            f"When selecting your task, the form will ask for a secret code. Your secret code for this round of drawing route cards is:{nr}",
+    with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
+        server.starttls()
+        server.login(facilitator['email'], facilitator['pwd'])
 
-            "\nPlease make your selection here:",
-            forms['select_routes'][0] + '\n',
-
-            "\nBest of luck..."
-            "Kringle. Kris Kringle"
-        ])
-        server.sendmail(facilitator['email'], family[nr].email,
-                        message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
-                            '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
-                            "\u2026", '...'))
-
-        ## Read in form for selecting new route cards
-route_selections = sas_utils.read_form(forms['draw_routes'][1])
-sas_routes = []
-
-for member in route_selections['Secret Code'].tolist():
-        if len(family[member].tasks) == 0:
-            selection = route_selections.loc[route_selections['Secret Code'] == member, 'Which of your tasks do you choose?'].values[0]
-
-            if selection == 'Task A':
-                family[member].tasks.append([family[member].selections[0]])
-                family[member].selections[0].selected = True
-                sas_routes.append([family[member].selections[0]])
-
-            elif selection == 'Task B':
-                family[member].tasks.append([family[member].selections[1]])
-                family[member].selections[1].selected = True
-                sas_routes.append([family[member].selections[1]])
-
-            elif selection == 'Task C':
-                family[member].tasks.append([family[member].selections[2]])
-                family[member].selections[2].selected = True
-                sas_routes.append([family[member].selections[2]])
-
-            else:
-                # print('Something weird is up with task selection for ', member)
-                family[member].tasks.append([family[member].selections[2]])
-                family[member].selections[2].selected = True
-                sas_routes.append([family[member].selections[2]])
-
-# Add task to the secret agent's list
-for member in family:
-    if family[member].is_agent:
-        family[member].tasks += sas_routes
-
-# Email confirmation to the chooser
-
-with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
-    server.starttls()
-    server.login(facilitator['email'], facilitator['pwd'])
-
-    for member in family:
-        if not family[member].tasks_emailed and not family[member].is_agent:
-            subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Confirmation')
+        for nr in send_routes_to:
+            subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Cards')
             message = '\n'.join([
                 subject,
-                f"Hey there, {member.split('_')[0]}\n",
-                "Congrats! You chose more tasks! Good luck with that.\n",
-                "The additional task you chose is:",
-                family[member].tasks[0].title + '\n'+ family[member].tasks[0].details,
-                "\nBest of luck..."
-                "Kringle. Kris Kringle"
-                ])
-            server.sendmail(facilitator['email'], family[member].email,
-                            message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
-                                '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
-                                "\u2026", '...'))
-            family[member].task_emailed = True
+                f"Hey there, {nr.split('_')[0]}\n",
+                "You're a crazy person and asked for more tasks. It's too late to take it back now.\n",
+                "The additional tasks you can choose from are:\n",
 
-        elif not family[member].tasks_emailed and family[member].is_agent:
-            subject = 'Subject: {}\n\n'.format('Someone Drew a Route Card...')
-            message = '\n'.join([
-                subject,
-                f"Hey there, {member}\n",
-                "I'm sorry to report that someone drew a route card. So now you have an extra task...\n",
-                "Your new list of tasks is:",
-                '\n ' + '\n'.join(['\n' + task.title + '\n' + task.details for task in family[member].tasks]),
-                "\nBest of luck..."
+                f"\nTask A: {family[nr].selections[0].title}",
+                f"{family[nr].selections[0].details}"
+                f"\n\nTask B: {family[nr].selections[1].title}",
+                f"{family[nr].selections[1].details}"
+                f"\n\nTask C: {family[nr].selections[2].title}\n",
+                f"{family[nr].selections[2].details}",
+
+                f"When selecting your task, the form will ask for a secret code. Your secret code for this round of drawing route cards is: {nr}",
+
+                "\nPlease make your selection here:",
+                forms['select_routes'][0] + '\n',
+
+                "\nBest of luck...",
                 "Kringle. Kris Kringle"
             ])
-            server.sendmail(facilitator['email'], family[member].email,
+            server.sendmail(facilitator['email'], family[nr].email,
                             message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
                                 '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
                                 "\u2026", '...'))
-            family[member].task_emailed = True
 
-## Save the new pickle file
-with open('family.pkl','wb') as f:
-    pickle.dump(family, f)
+        ## Save the new pickle file
+        with open('family.pkl', 'wb') as f:
+            pickle.dump(family, f)

@@ -5,3 +5,6 @@
 /family_details.pkl
 /form_details.pkl
 /shuffled_tasks.pkl
+/family.pkl
+/family_backup.pkl
+/pickle_jar_backup.py

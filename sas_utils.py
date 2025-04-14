@@ -29,11 +29,10 @@ class mission(object):
     id = ''
     selected = False
 
-    def __init__(self, title, details, submitter,id):
+    def __init__(self, title, details, submitter):
         self.title = title
         self.details = details
         self.submitter = submitter
-        self.id = id
         self.selected = False
 
 
@@ -53,6 +52,10 @@ def read_form(url_in):
     url_use = url_in.replace('/edit#gid=', '/export?format=csv&gid=')
     if url_use == url_in:
         url_use = url_in.replace('/edit?resourcekey#gid=', '/export?format=csv&gid=')
+    if url_use == url_in:
+        url_use = url_in.replace('/edit?resourcekey=&gid=', '/export?format=csv&gid=')
+    if url_use == url_in:
+        url_use = url_in.replace('/edit?gid=','/export?format=csv&gid=')
     return pd.read_csv(url_use)
 def load_pickles():
     with open('family.pkl', 'rb') as f:
@@ -99,3 +102,24 @@ def too_many_responses(submissions, family):
         submissions.drop_duplicates(subset = 'Who Are You?', keep = 'last', inplace = True)
 
     return submissions
+
+
+## SUBMITTED TASKS
+ # Reads in the tasks taat are submitted by family members for shuffling and selecting
+
+def build_tasks(target):
+    output = {}
+    for t in target:
+        output[t.id] = t
+    with open('tasks.pkl','wb') as f:
+        pickle.dump(output, f, protocol=pickle.HIGHEST_PROTOCOL)
+    return output
+def save_tasks(target):
+    with open('tasks.pkl','wb') as f:
+        pickle.dump(target, f, protocol=pickle.HIGHEST_PROTOCOL)
+    return target
+
+def load_tasks():
+    with open('tasks.pkl', 'rb') as f:
+        target = pickle.load(f)
+    return target
