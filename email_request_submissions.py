@@ -2,6 +2,7 @@ import smtplib
 import sas_utils
 from sas_utils import person
 from time import time
+import pickle
 
 if __name__ == "__main__":
 
