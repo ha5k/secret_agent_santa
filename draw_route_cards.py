@@ -24,9 +24,9 @@ if __name__ == "__main__":
 
 
     send_routes_to = []
-    print(send_routes_to)
+
     for nr in family:
-        print(nr)
+
         unused_tasks = sas_utils.get_unused_tasks(family)
         shuffle(unused_tasks)
         if len(family[nr].selections) == 0 and family[nr].playing:
@@ -34,9 +34,6 @@ if __name__ == "__main__":
             family[nr].selections = [unused_tasks[k] for k in range(min(3, len(unused_tasks)))]
             for k in family[nr].selections:
                 k.selected = True
-                print([len(family[k].selections) for k in family])
-                print(family[list(family)[-1]].selections)
-
 
      # Email options and remove options from backup list
 

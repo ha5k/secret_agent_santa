@@ -57,7 +57,7 @@ if __name__ == "__main__":
                                 message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', "'").replace('\u2013', '-').replace('\xe9',"[e-with-an-accent]").replace("\u2026",'...'))
                 ## TODO This unicode replacement is rough. Consider fixing.
 
-        facilitator['game_state'] = 'Run Game'
+        facilitator['game_state'] = 'Get Selections'
         with open('facilitator_details.pkl', 'wb') as f:
             pickle.dump(facilitator, f)
 

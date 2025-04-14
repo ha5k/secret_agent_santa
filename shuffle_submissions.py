@@ -121,7 +121,7 @@ if __name__ == "__main__":
         with open('family.pkl', 'wb') as f:
             pickle.dump(family, f)
 
-        facilitator['game_state'] = 'Shuffled_submissions'
+        facilitator['game_state'] = 'Shuffled submissions'
         with open('facilitator_details.pkl','wb') as f:
             pickle.dump(facilitator, f)
 
