@@ -8,7 +8,7 @@ from time import time
 from random import shuffle
 
 ## Read In Form for Drawing Route Cards
-family, forms, facilitator = sas_utils.load_pickles()
+# family, forms, facilitator = sas_utils.load_pickles()
 tasks = sas_utils.load_tasks()
 mc = sas_utils.read_form(forms['message_center'][1])
 
