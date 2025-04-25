@@ -131,6 +131,9 @@ if __name__ == "__main__":
                     break
         print('You did it!')
 
+
+        facilitator['game_state'] = 'Issue Tasks'
+
         ## Save a copy of the family pickle with task information
         with open('family.pkl', 'wb') as f:
             pickle.dump(family, f)

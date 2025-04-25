@@ -23,6 +23,8 @@ elif facilitator['game_state'] == 'Get Selections':
     print('Pulling selections and starting the game')
     import build_assignments
     exec(open('build_assignments.py').read())
+
+elif facilitator['game_state'] == 'Issue Tasks':
     import email_issue_tasks
     exec(open('email_issue_tasks.py').read())
 
