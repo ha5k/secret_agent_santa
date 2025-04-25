@@ -133,6 +133,8 @@ if __name__ == "__main__":
 
 
         facilitator['game_state'] = 'Issue Tasks'
+        with open('facilitator_details.pkl', 'wb') as f:
+            pickle.dump(facilitator, f)
 
         ## Save a copy of the family pickle with task information
         with open('family.pkl', 'wb') as f:
