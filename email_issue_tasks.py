@@ -80,7 +80,7 @@ if __name__ == "__main__":
         print('Ceremony Details Sent. Do not read them')
 
     ## Save the new pickle file
-    with open('family.pkl','wb') as f:
+    with open('family.pkl', 'wb') as f:
         pickle.dump(family, f)
 
     facilitator['game_state'] = 'Run Game'

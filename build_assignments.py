@@ -80,11 +80,19 @@ if __name__ == "__main__":
         for member in family:
             if family[member].feels_lucky:
                 unused_tasks = sas_utils.get_unused_tasks(family)
-
+                random.shuffle(unused_tasks) #Shuffle the tasks... otherwise you'll give it to the earliest
                 k = 0
+
                 ## Uncomment this block if you don't want "I'm feeling Lucky" to get their own task
                 # while k == 0 or (unused_tasks[k] in family[member].submissions):
                 #     k += 1
+
+                ## This code is a hack to give Dad a handicap if he feels lucky
+                if member == 'Dad':
+                    for k in range(len(unused_tasks)):
+                        if unused_tasks[k] in family[member].submissions:
+                            break
+
                 family[member].tasks = [unused_tasks[k]]
                 unused_tasks[k].selected = True
 
