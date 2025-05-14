@@ -69,11 +69,6 @@ if __name__ == "__main__":
                                     "\u2026", '...'))
                 family[member].task_emailed = True
 
-                server.sendmail(facilitator['email'], family[member].email,
-                            message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
-                                '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
-                                "\u2026", '...'))
-
 
                 subject = 'Subject: {}\n\n'.format('Someone Drew a Route Card...')
                 message = '\n'.join([
