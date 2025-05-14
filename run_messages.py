@@ -57,7 +57,7 @@ if __name__ == "__main__":
                             f"The task is: {tasks[task].title}",
                             f"{tasks[task].details}",
 
-                            f"\nThe question is...",
+                            f"\nThe message is...",
                             f"{m}",
 
                             "\nYou can respond to this message at the link below:",
