@@ -45,6 +45,8 @@ if __name__ == "__main__":
         if family[member].is_agent:
             family[member].tasks += sas_routes
 
+    ship_warning = False
+
     # Email confirmation to the chooser
     with smtplib.SMTP('smtp.gmail.com', facilitator['port']) as server:
         server.starttls()
@@ -52,7 +54,8 @@ if __name__ == "__main__":
 
         sas = [k for k in family if family[k].is_agent][0]
         for member in family:
-            if not family[member].task_emailed and not family[member].is_agent and family[member].playing:
+            if not family[member].task_emailed and family[member].playing:
+                ship_warning = True
                 subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Confirmation')
                 message = '\n'.join([
                     subject,
@@ -100,21 +103,24 @@ if __name__ == "__main__":
                                     '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
                                     "\u2026", '...'))
 
-            elif family[member].playing:
-                subject = 'Subject: {}\n\n'.format('Someone Drew a Route Card...')
-                message = '\n'.join([
-                    subject,
-                    f"Hey there, {member}\n",
-                    "I just wanted to let you know that someone just chose a route card.",
-                    "Be on the lookout for renewed shenangigans, suspicious behavior, or sudden attempts to connect LA and NYC.",
-                    "\nAll Aboard!",
-                    "Uncanny Valley Tom Hanks",
-                    "(The conductor of the Polar Express)"
-                ])
-                server.sendmail(facilitator['email'], family[member].email,
-                                message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
-                                    '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
-                                    "\u2026", '...'))
+                if ship_warning:
+                    for m in family:
+                        if family[m].playing:
+                            subject = 'Subject: {}\n\n'.format('Someone Drew a Route Card...')
+                            message = '\n'.join([
+                                subject,
+                                f"Hey there, {m}\n",
+                                "I just wanted to let you know that someone just chose a route card.",
+                                "Be on the lookout for renewed shenangigans, suspicious behavior, or sudden attempts to connect LA and NYC.",
+                                "\nAll Aboard!",
+                                "Uncanny Valley Tom Hanks",
+                                "(The conductor of the Polar Express)"
+                            ])
+                            server.sendmail(facilitator['email'], family[m].email,
+                                            message.replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"').replace(
+                                                '\u2018', "'").replace('\u2013', '-').replace('\xe9', "[e-with-an-accent]").replace(
+                                                "\u2026", '...'))
+                    ship_warning = False
 
 
     ## Save the new pickle file
