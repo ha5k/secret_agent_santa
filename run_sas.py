@@ -46,4 +46,6 @@ with open('facilitator_details.pkl', 'wb') as f:
     pickle.dump(facilitator, f)
 
 with open('running_log.txt', 'a') as t:
-    t.write("Ran run_sas.py at " + datetime.now().strftime("%Y%m%d_%H%M%S"))
+    output = "Ran run_sas.py at " + datetime.now().strftime("%Y%m%d_%H%M%S")
+    print(output)
+    t.write(output + '\n')
