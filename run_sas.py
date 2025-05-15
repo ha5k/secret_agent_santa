@@ -3,6 +3,8 @@
 
 import sas_utils
 import pickle
+from datetime import datetime
+
 family, forms, facilitator = sas_utils.load_pickles()
 
 # If game hasn't started, send out the first batch of emails
@@ -42,3 +44,6 @@ elif facilitator['game_state'] == 'Run Game':
 
 with open('facilitator_details.pkl', 'wb') as f:
     pickle.dump(facilitator, f)
+
+with open('running_log.txt', 'a') as t:
+    t.write("Ran run_sas.py at " + datetime.now().strftime("%Y%m%d_%H%M%S"))
