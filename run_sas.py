@@ -42,6 +42,10 @@ elif facilitator['game_state'] == 'Run Game':
     print('Checking for Messages')
     exec(open('run_messages.py').read())
 
+    # import gift_ideas
+    print('Running Gift Idea Generator!')
+    exec(open('gift_ideas.py').read())
+
 with open('facilitator_details.pkl', 'wb') as f:
     pickle.dump(facilitator, f)
 

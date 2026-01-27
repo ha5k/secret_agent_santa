@@ -16,10 +16,11 @@ if __name__ == "__main__":
     sas_routes = []
     for member in route_selections['Secret Code'].tolist():
             if len(family[member].tasks) == 0 and family[member].playing:
-                print('Someone selected Route Cards!')
+                print('Someone selected Route Cards!!!')
                 selection = route_selections.loc[route_selections['Secret Code'] == member, 'Which of your tasks do you choose?'].values[0]
 
                 if selection == 'Task A':
+                    # print('They picked Task A')
                     family[member].tasks = [family[member].selections[0]]
                     family[member].selections[0].selected = True
                     sas_routes.append(family[member].selections[0])
@@ -55,9 +56,12 @@ if __name__ == "__main__":
 
             sas = [k for k in family if family[k].is_agent][0]
             for member in family:
-                if not family[member].task_emailed and family[member].playing:
+                if not family[member].task_emailed and family[member].playing and len(family[member].tasks) > 0:
                     ship_warning = True
                     subject = 'Subject: {}\n\n'.format('Your Secret Agent Santa Bonus Route Confirmation')
+                    # print(member[-3], member in family, len(family[member].tasks))
+                    # print("Test!:",family[member].tasks[0].title[0],family[member].tasks[0].details[0])
+
                     message = '\n'.join([
                         subject,
                         f"Hey there, {member.split('_')[0]}\n",
