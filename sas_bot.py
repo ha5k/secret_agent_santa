@@ -994,6 +994,19 @@ async def complete(ctx):
     if not bot.game.route_confirms:  # If the agent isn't confirming route cards
         print("Route confirms not active. Generating hint")
         await ctx.author.send("Alright, I trust you. Congrats on completing your route card!")
+
+        player_name = bot.family[user_id].name
+        # Generate a clean timestamp: YYYY-MM-DD HH:MM:SS
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        log_line = f"[{timestamp}] Player: {player_name}\nEntry: {proof_msg.content}\n{'-' * 40}\n"
+
+        # 5. Thread-safe File Writing operation
+        def write_to_file():
+            # Open in 'a' mode to append to the end without deleting past entries
+            with open("journal.txt", "a", encoding="utf-8") as f:
+                f.write(log_line)
+
         hint_cat = await complete_route(ctx, bot, ctx.author.id)
         bot.missions[task_id].is_complete = True
         if hint_cat is None:
@@ -1169,8 +1182,10 @@ async def journal(ctx, *, entry_text=""):
             return m.author.id == user_id and m.guild is None
 
         try:
+            print("Doing a journal entry")
             msg = await bot.wait_for('message', check=check, timeout=120.0)
             entry_text = msg.content
+            print("Journal Entry complete: ", entry_text)
         except asyncio.TimeoutError:
             return await ctx.author.send("Journal entry timed out. Please type `!journal` to try again.")
 
