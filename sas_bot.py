@@ -223,7 +223,7 @@ async def on_ready():
 
     print("Checking for active route deadlines...")
     current_time = time.time()
-    day_in_seconds = 86400/accelerant
+    day_in_seconds = 86400
 
     for user_id, player in bot.family.items():
         # Check if they are sitting on held up choices and have a timestamp saved
@@ -235,13 +235,13 @@ async def on_ready():
             seconds_elapsed = current_time - player.route_draw_time
 
             # Calculate remaining time left on their 24-hour window
-            remaining_time = (day_in_seconds - seconds_elapsed) * accelerant
+            remaining_time = (day_in_seconds - seconds_elapsed)
 
             # Inner worker function for the recovered loop
             async def recovered_countdown(uid, delay):
                 if delay > 0:
                     print(f" -> Restoring countdown for user {uid}. "
-                          f"{round(delay / 3600 * accelerant, 2)} hours remaining.")
+                          f"{round(delay / 3600, 2)} hours remaining.")
                     await asyncio.sleep(delay)
                 else:
                     print(f" -> User {uid} deadline expired while the bot was offline!")
@@ -276,7 +276,7 @@ async def paranoia_engine_loop():
         # 1. Wait a random interval between 4 and 8 hours
         # (4 hours = 14400s, 8 hours = 28800s)
         # Tip: For testing, change this to random.randint(30, 60) for seconds!
-        wait_time = random.randint(60*60*24*10/int(accelerant), 60*60*24*31/int(accelerant))
+        wait_time = random.randint(60*60*24*10, 60*60*24*31)
         await asyncio.sleep(wait_time)
 
         # 2. Check if a game is actively running with players
@@ -911,7 +911,7 @@ async def draw(ctx, draw_what=''):
     # --- THE BACKGROUND AUTO-TRIGGER ---
     async def route_deadline_countdown():
         print(f"[TIMER] Started 24h countdown for user {user_id}")
-        await asyncio.sleep(86400*accelerant)  # Sleep for 24 hours
+        await asyncio.sleep(86400)  # Sleep for 24 hours
 
         # Check if they still have pending routes. If empty, it means they already ran !select manually!
         held_routes = await asyncio.to_thread(get_all_held_tasks, user_id)
