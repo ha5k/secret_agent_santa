@@ -1178,7 +1178,7 @@ async def journal(ctx, *, entry_text=""):
         return await ctx.author.send("Journal entry was blank. Action cancelled.")
 
     # 3. Confirm submission using your button-based helper
-    send_confirm = await confirm_action(ctx, "Are you ready to lock this entry into your game journal?\n> "+msg)
+    send_confirm = await confirm_action(ctx, "Are you ready to lock this entry into your game journal?\n> "+entry_text)
     if not send_confirm:
         return await ctx.author.send("Cancelled! I won't save this note.")
 
