@@ -624,7 +624,11 @@ async def view(ctx, view_what=''):
             to_view = bot.family[ctx.author.id].hints
 
     # Let the user select which task/route/hint to view
-    await ctx.author.send("You have %i %s for this game" % (len(to_view), view_what))
+    if view_what != "hints":
+        await ctx.author.send("You have %i %s for this game" % (len(to_view), view_what))
+    else:
+        await ctx.author.send("You have %i tasks with %s for this game" % (len(to_view), view_what))
+
     hide_titles = view_what == "hints"
     task_id = await select_task_via_buttons(bot, ctx, "Choose one to view!",
                                             list(to_view), include_exit=True, hide_titles=hide_titles)
