@@ -556,7 +556,7 @@ async def add(ctx, task_type=''):
             # bot.missions[new_task.ident] = new_task
             # bot.family[ctx.author.id].submissions.append(new_task.ident)
         else:
-            await ctx.author.send("Consider it forgotten")
+            return await ctx.author.send("Consider it forgotten")
     except asyncio.TimeoutError:
         return await ctx.author.send("Sorry, you took too long to reply!")
 
