@@ -276,7 +276,7 @@ async def paranoia_engine_loop():
         # 1. Wait a random interval between 4 and 8 hours
         # (4 hours = 14400s, 8 hours = 28800s)
         # Tip: For testing, change this to random.randint(30, 60) for seconds!
-        wait_time = random.randint(60*60*24*10/accelerant, 60*60*24*31/accelerant)
+        wait_time = random.randint(60*60*24*10/int(accelerant), 60*60*24*31/int(accelerant))
         await asyncio.sleep(wait_time)
 
         # 2. Check if a game is actively running with players
