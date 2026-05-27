@@ -478,13 +478,18 @@ async def select_task_via_buttons(bot, ctx, prompt_message: str, task_ids: list,
     Returns the integer task_id, or None if they click exit, cancel, or time out.
     """
     user_id = ctx.author.id
+    print("you made it")
 
     if not task_ids:
         await ctx.send("There are no tasks available to select from.")
+        print("No tasks found")
         return None
     # Pass the include_exit flag down into the view generator
+    print("About to send prompt")
     view = TaskSelectionView(bot, user_id, task_ids, include_exit=include_exit, hide_titles=hide_titles)
+    print("Sending prompt")
     msg = await ctx.send(prompt_message, view=view)
+    print("Buttons sent")
     await view.wait()
 
     try:

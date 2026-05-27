@@ -1325,7 +1325,7 @@ async def on_command_error(ctx, error):
 async def anonymous(ctx, *, message_text=""):
     """Allows a player to send an anonymous message to the channel or to players with matching tasks"""
     user_id = ctx.author.id
-
+    print(f"{user_id} is sending an anonymous message!")
     if user_id not in bot.family:
         return await ctx.author.send("You need to register with `!join` first!")
 
@@ -1339,7 +1339,9 @@ async def anonymous(ctx, *, message_text=""):
         try:
             msg = await bot.wait_for('message', check=check, timeout=120.0)
             message_text = msg.content
+            print("Message Found")
         except asyncio.TimeoutError:
+            print("Timeout Error")
             return await ctx.author.send("Command timed out.")
 
     if not message_text.strip():
@@ -1361,6 +1363,7 @@ async def anonymous(ctx, *, message_text=""):
 
     # 3. Call your button selector helper!
     prompt = "Where should I route this anonymous message?"
+    print("Looking for buttons")
     chosen_destination = await select_task_via_buttons(bot, ctx, prompt, menu_options, include_exit=True)
 
     # Clean up our temporary central channel dictionary injection immediately
