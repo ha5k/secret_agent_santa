@@ -10,5 +10,8 @@
 /pickle_jar_backup.py
 /backlog_development.txt
 
+route_submissions/*
+!route_submissions/.gitkeep
+
 .env
 *.db
