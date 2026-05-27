@@ -1351,7 +1351,7 @@ async def anonymous(ctx, *, message_text=""):
         return  # Player clicked Exit or timed out
 
     # 4. Final confirmation check
-    send_confirm = await confirm_action(ctx, f"Are you ready to dispatch this anonymous message?\n> {msg}")
+    send_confirm = await confirm_action(ctx, f"Are you ready to dispatch this anonymous message?\n> {message_text}")
     if not send_confirm:
         return await ctx.author.send("Cancelled.")
 
