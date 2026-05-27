@@ -397,6 +397,7 @@ class TaskSelectionView(discord.ui.View):
 
         # 1. Dynamically build a button for every task ID passed in
         for task_id in task_ids:
+            print("Task ID:", task_id)
             task_title = self.bot.missions[task_id].title
             short_label = task_title if len(task_title) <= 60 else f"{task_title[:57]}..."
             if hide_titles:
@@ -409,16 +410,20 @@ class TaskSelectionView(discord.ui.View):
             if task_type == 'Route' and bot.missions[int(task_id)].is_complete:
                 task_type = '✅ Route'
 
+            print("Creating Button")
             button = discord.ui.Button(
                 label=f"{task_type} {task_id}: {short_label}",
                 style=discord.ButtonStyle.secondary,
                 custom_id=str(task_id)
             )
+            print("Calling button")
             button.callback = self.make_callback(task_id)
+            print("Adding button")
             self.add_item(button)
 
         # 2. 🆕 Conditionally append a dark charcoal "Exit" button at the end
         if include_exit:
+            print("Including Exit")
             exit_button = discord.ui.Button(
                 label="Exit Menu",
                 style=discord.ButtonStyle.secondary,  # Dark slate gray color
