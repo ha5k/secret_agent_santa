@@ -407,8 +407,9 @@ class TaskSelectionView(discord.ui.View):
                                 bot.missions[int(task_id)].hold_for is not None):
                 task_type = 'Route'
 
-            if task_type == 'Route' and bot.missions[int(task_id)].is_complete:
-                task_type = '✅ Route'
+            if task_id != 0:
+                if task_type == 'Route' and bot.missions[int(task_id)].is_complete:
+                    task_type = '✅ Route'
 
             print("Creating Button")
             button = discord.ui.Button(
