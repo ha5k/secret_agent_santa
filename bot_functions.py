@@ -406,6 +406,9 @@ class TaskSelectionView(discord.ui.View):
                                 bot.missions[int(task_id)].hold_for is not None):
                 task_type = 'Route'
 
+            if task_type == 'Route' and bot.missions[int(task_id)].is_complete:
+                task_type = '✅ Route'
+
             button = discord.ui.Button(
                 label=f"{task_type} {task_id}: {short_label}",
                 style=discord.ButtonStyle.secondary,
