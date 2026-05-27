@@ -983,7 +983,7 @@ async def complete(ctx):
     print('task list', bot.family[ctx.author.id].tasks)
 
     # 3. Prompt the user for the proof
-    await ctx.author.send(f"Please send your text description and/or upload your image attachments now!")
+    await ctx.author.send(f"Please send your text description and upload your image attachments now!")
 
     try:
         # Wait 2 minutes for them to upload/type everything
