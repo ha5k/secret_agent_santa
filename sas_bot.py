@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import os
 # import io
 # import urllib
-# import aiohttp
+import aiohttp
 # import pickle
 from bot_functions import finalize_route_selection, AgentPollView, confirm_action, generate_cryptic_clue, \
     generate_mission_image, select_task_via_buttons, advance_game, complete_route, count_suspicions, is_the_manager, \
@@ -995,6 +995,25 @@ async def complete(ctx):
     if not proof_msg.content and not proof_msg.attachments:
         return await ctx.author.send("It looks like you sent an empty message. Submission cancelled.")
 
+    if proof_msg.attachments:
+        submission_dir = "/home/eamonn_shirey/secret_agent_santa/route_submissions"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        for k in range(len(proof_msg.attachments)):
+            attachment = proof_msg.attachments[k]
+            file_extension = os.path.splitext(attachment.filename)[1] or ".png"
+            filename = f"{timestamp}_{str(user_id)}{file_extension}"
+            full_save_path = os.path.join(submission_dir, filename)
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(attachment.url) as response:
+                        if response.status == 200:
+                            with open(full_save_path, "wb") as f:
+                                f.write(await response.read())
+            except Exception as e:
+                await ctx.send("❌ A critical system error occurred while caching the image data.")
+                print(f"Image Save Exception: {e}")
+
+
     if not bot.game.route_confirms:  # If the agent isn't confirming route cards
         print("Route confirms not active. Generating hint")
         await ctx.author.send("Alright, I trust you. Congrats on completing your route card!")
@@ -1006,10 +1025,10 @@ async def complete(ctx):
         log_line = f"[{timestamp}] Player: {player_name}\nEntry: {proof_msg.content}\n{'-' * 40}\n"
 
         # 5. Thread-safe File Writing operation
-        def write_to_file():
+
             # Open in 'a' mode to append to the end without deleting past entries
-            with open("journal.txt", "a", encoding="utf-8") as f:
-                f.write(log_line)
+        with open("journal.txt", "a", encoding="utf-8") as f:
+            f.write(log_line)
 
         hint_cat = await complete_route(ctx, bot, ctx.author.id)
         bot.missions[task_id].is_complete = True
