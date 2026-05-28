@@ -33,9 +33,12 @@ def generate_cryptic_clue(task_text):
         return "OPERATION CLASSIFIED"
 
     # Focus on the first sentence for the core action verb
-    first_sent_tags = pos_tag(word_tokenize(sentences[0]))
+    first_sent_tokens = [w for w in word_tokenize(sentences[0]) if w.isalpha() and len(w) > 1]
+    first_sent_tags = pos_tag(first_sent_tokens)
+
     # Scan the whole text for descriptive nouns
-    all_tags = pos_tag(word_tokenize(clean_text))
+    all_tokens = [w for w in word_tokenize(clean_text) if w.isalpha() and len(w) > 1]
+    all_tags = pos_tag(all_tokens)
 
     # 4. Find the best Action (Verb)
     # We skip weak "state of being/possession" verbs like is, are, have, do
