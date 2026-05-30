@@ -640,6 +640,9 @@ async def view(ctx, view_what=''):
     # Actually show the user what they asked for
     if view_what != 'hints':
         await ctx.author.send(await format_task(task_id))
+        if view_what == 'submissions':
+            route_confirm = "is" if bot.missions[task_id].route_eligible else "is __not__"
+            await ctx.author.send(f"This task {route_confirm} eligible to be  a route card")
     elif bot.game.status != 'Joining':  # You have to generate hints from the lookup
         print("Hint ID in !view (not joining):", task_id, type(task_id))
         title = bot.missions[task_id].title if to_view[task_id].get(0, False) else "__<TITLE REDACTED>__"
