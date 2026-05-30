@@ -376,6 +376,8 @@ async def confirm_action(ctx, confirm_message="Are you sure?", send_to_author=Tr
     try:
         if view.value is True:
             await msg.edit(content=f"{confirm_message} *(Confirmed)*")
+        elif view.value is False:
+            await msg.edit(content=f"{confirm_message} *(Selected No)*")
         else:
             await msg.edit(content=f"{confirm_message} *(Cancelled/Timed out)*")
     except Exception:
