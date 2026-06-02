@@ -1515,7 +1515,7 @@ async def status_check(ctx):
         needs_tasks = 3 if bot.family[n].playing else 0
         msg += f"\n - {name}: {task_count}/{needs_tasks} submitted"
 
-    ctx.author.send(msg)
+    await ctx.author.send(msg)
 
 @bot.command()
 @commands.has_role("sas_manager")
