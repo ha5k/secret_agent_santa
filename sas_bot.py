@@ -1503,6 +1503,21 @@ async def trigger_midgame_checkin(ctx):
 
 @bot.command()
 @commands.has_role("sas_manager")
+async def status_check(ctx):
+    """Generates a readout of all the people who have registered and whether they've submitted tasks"""
+
+    print("Generating a readout from !status_check")
+    msg = "Current players:"
+    for n in bot.family:
+        name = bot.family[n].name
+        task_count = len([k for k in bot.family[n].submissions if bot.missions[k].task_eligible])
+        needs_tasks = 3 if bot.family[n].playing else 0
+        msg += f"\n - {name}: {task_count}/{needs_tasks} submitted"
+
+    ctx.author.send(msg)
+
+@bot.command()
+@commands.has_role("sas_manager")
 async def debug(ctx, name=''):
     """The manager uses this to debug the code"""
     print('\nDebug code entered!\n')
