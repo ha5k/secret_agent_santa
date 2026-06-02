@@ -1517,7 +1517,7 @@ async def status_check(ctx):
         else:
             msg += f"\n- {name} is registered, but not playing"
 
-    await ctx.author.send(msg)
+    await ctx.channel.send(msg)
 
 @bot.command()
 @commands.has_role("sas_manager")
