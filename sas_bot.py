@@ -1502,8 +1502,7 @@ async def trigger_midgame_checkin(ctx):
     await asyncio.to_thread(save_game_to_db, bot)
 
 @bot.command()
-@commands.dm_only()
-@is_the_manager()
+@commands.has_role("sas_manager")
 async def status_check(ctx):
     """Generates a readout of all the people who have registered and whether they've submitted tasks"""
 
@@ -1513,7 +1512,10 @@ async def status_check(ctx):
         name = bot.family[n].name
         task_count = len([k for k in bot.family[n].submissions if bot.missions[k].task_eligible])
         needs_tasks = 3 if bot.family[n].playing else 0
-        msg += f"\n - {name}: {task_count}/{needs_tasks} submitted"
+        if bot.family[n].playing:
+            msg += f"\n- {name}: {task_count}/{needs_tasks} submitted"
+        else:
+            msg += f"\n- {name} is registered, but not playing"
 
     await ctx.author.send(msg)
 
