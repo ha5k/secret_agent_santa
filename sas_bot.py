@@ -1502,7 +1502,8 @@ async def trigger_midgame_checkin(ctx):
     await asyncio.to_thread(save_game_to_db, bot)
 
 @bot.command()
-@commands.has_role("sas_manager")
+@commands.dm_only()
+@is_the_manager()
 async def status_check(ctx):
     """Generates a readout of all the people who have registered and whether they've submitted tasks"""
 
