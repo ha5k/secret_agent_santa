@@ -366,10 +366,10 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
             print(f"Image generation exception: {e}")
 
 
-ai_client = OpenAI(
-    base_url="https://gen.pollinations.ai/v1",
-    api_key=os.getenv("POLLINATIONS_API_KEY")
-)
+# ai_client = OpenAI(
+#     base_url="https://gen.pollinations.ai/v1",
+#     api_key=os.getenv("POLLINATIONS_API_KEY")
+# )
 
 
 # --- Initialize Discord Bot ---
