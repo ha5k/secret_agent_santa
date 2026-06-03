@@ -5,7 +5,7 @@ import discord
 import urllib
 import aiohttp
 import io
-from openai import OpenAI
+# from openai import OpenAI
 
 # Make sure these are downloaded on your cloud VM
 nltk.download('punkt')
@@ -363,49 +363,49 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
             print(f"Image generation exception: {e}")
 
 
-ai_client = OpenAI(
-    base_url="https://gen.pollinations.ai/v1",
-    api_key=os.getenv("POLLINATIONS_API_KEY")
-)
-
-
-# --- Initialize Discord Bot ---
-def generate_ai_clue(task: str):
-    """
-    Generates a two-word clue based on the provided task.
-    Usage: !clue <your task here>
-    """
-    # Let the user know the bot is thinking
-
-    try:
-        # Call the Pollinations AI text API
-        response = ai_client.chat.completions.create(
-            model="openai",  # Adjust model name based on your Pollinations tier/preference
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful game assistant. The user will give you a task. "
-                               "Your job is to generate a relevant clue that is EXACTLY two words long. "
-                               "The clue should ideally be a pun about about the task or christmas without giving too much away"
-                               "Do not include periods, explanations, or introductory text. Just two words."
-                },
-                {
-                    "role": "user",
-                    "content": f"Task: {task}"
-                }
-            ],
-            temperature=0.7
-        )
-
-        # Extract the response text
-        clue = response.choices[0].message.content.strip()
-
-        # Send the result back to Discord
-        print("Generated Clue")
-        return clue
-
-    except Exception as e:
-        print(f"Error calling Pollinations AI in hint generation: {e}")
-        return generate_cryptic_clue(task)
+# ai_client = OpenAI(
+#     base_url="https://gen.pollinations.ai/v1",
+#     api_key=os.getenv("POLLINATIONS_API_KEY")
+# )
+#
+#
+# # --- Initialize Discord Bot ---
+# def generate_ai_clue(task: str):
+#     """
+#     Generates a two-word clue based on the provided task.
+#     Usage: !clue <your task here>
+#     """
+#     # Let the user know the bot is thinking
+#
+#     try:
+#         # Call the Pollinations AI text API
+#         response = ai_client.chat.completions.create(
+#             model="openai",  # Adjust model name based on your Pollinations tier/preference
+#             messages=[
+#                 {
+#                     "role": "system",
+#                     "content": "You are a helpful game assistant. The user will give you a task. "
+#                                "Your job is to generate a relevant clue that is EXACTLY two words long. "
+#                                "The clue should ideally be a pun about about the task or christmas without giving too much away"
+#                                "Do not include periods, explanations, or introductory text. Just two words."
+#                 },
+#                 {
+#                     "role": "user",
+#                     "content": f"Task: {task}"
+#                 }
+#             ],
+#             temperature=0.7
+#         )
+#
+#         # Extract the response text
+#         clue = response.choices[0].message.content.strip()
+#
+#         # Send the result back to Discord
+#         print("Generated Clue")
+#         return clue
+#
+#     except Exception as e:
+#         print(f"Error calling Pollinations AI in hint generation: {e}")
+#         return generate_cryptic_clue(task)
 
 
