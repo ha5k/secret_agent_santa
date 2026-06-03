@@ -17,6 +17,8 @@ from db_manager import hydrate_bot_memory, get_all_pending_tasks, get_all_held_t
     save_game_to_db, save_player_to_db, save_mission_to_db, delete_mission_from_db, get_all_submitted_tasks, \
     clear_all_database_data
 import time
+
+from hint_generator import generate_ai_clue
 from sas_utils import gameState, person, mission
 import logging
 from discord.ext import tasks
@@ -646,13 +648,15 @@ async def view(ctx, view_what=''):
     elif bot.game.status != 'Joining':  # You have to generate hints from the lookup
         print("Hint ID in !view (not joining):", task_id, type(task_id))
         title = bot.missions[task_id].title if to_view[task_id].get(0, False) else "__<TITLE REDACTED>__"
-        details = generate_cryptic_clue(bot.missions[task_id].details) if to_view[task_id].get(1, False) else "__HINT REDACTED__"
+        # details = generate_cryptic_clue(bot.missions[task_id].details) if to_view[task_id].get(1, False) else "__HINT REDACTED__"
+        details = generate_ai_clue(bot.missions[task_id].details) if to_view[task_id].get(1, False) else "__HINT REDACTED__"
         f = await generate_mission_image(bot.missions[task_id].details) if to_view[task_id].get(2, False) else None
         await ctx.author.send(await format_task(task_id, title=title, details=details), file=f)
     else:  # You have to generate hints from the submissions
         print("Hint ID in !view (joining):", task_id, type(task_id), len(to_view))
         title = bot.missions[task_id].title
-        details = generate_cryptic_clue(bot.missions[task_id].details)
+        # details = generate_cryptic_clue(bot.missions[task_id].details)
+        details = generate_ai_clue(bot.missions[task_id].details)
         f = await generate_mission_image(bot.missions[task_id].details)
         msg = await format_task(task_id, title=title, details=details)
         await ctx.author.send(msg, file=f)
