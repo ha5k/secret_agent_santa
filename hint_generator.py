@@ -324,29 +324,29 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
     Takes a string prompt, fetches an AI-generated image from Pollinations.ai,
     and packages it directly into an in-memory discord.File payload.
     """
-
-    # prompt_text = 'Learn and perform the choreography for Robyn’s “Call your girlfriend” or Beyoncé’s “Single Ladies”.  Record your final performance OR preferably perform it live at the Secret Santa reveal!  Accurate attire encouraged…'
-
-    # 1. Clean and encode the text string to be safe for a URL path
-    encoded_prompt = urllib.parse.quote(prompt_text)
     api_key = os.getenv("POLLINATIONS_API_KEY")
 
     if not api_key:
-        print("The api key for pollinations wasn't found!")
+        print("❌ Warning: The api key for pollinations wasn't found in environment variables!")
 
-    # 2. Build your authorization headers using your account key
-    headers = {
-        "Authorization": f"Bearer {api_key}"
-    }
-    # 2. Construct the URL (we can attach optional parameters like removing logos or selecting flux)
-    api_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=1024&nologo=true"
+    # 1. Clean and encode the text string to be safe for a URL path
+    encoded_prompt = urllib.parse.quote(prompt_text)
 
+    # 2. Construct the corrected URL targeting the NEW unified endpoint.
+    # Note: We pass the key as a URL parameter, along with width, height, and model choice.
+    api_url = (
+        f"https://gen.pollinations.ai/image/{encoded_prompt}"
+        f"?width=1024"
+        f"&height=1024"
+        f"&nologo=true"
+        f"&model=flux"
+        f"&key={api_key}"
+    )
 
-    # 3. Asynchronously fetch the image from the web
+    # 3. Asynchronously fetch the image from the web (No 'headers' dict needed!)
     async with aiohttp.ClientSession() as session:
         try:
-            # async with session.get(api_url) as response:
-            async with session.get(api_url, headers=headers, timeout=45) as response:
+            async with session.get(api_url, timeout=45) as response:
                 if response.status == 200:
                     # Read the binary image data into memory
                     image_bytes = await response.read()
@@ -356,12 +356,14 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
 
                     # Return it as a file ready for ctx.send()
                     return discord.File(fp=image_file, filename="mission_visual.png")
+
                 elif response.status == 401:
                     print("❌ Authentication Failed: Your Pollinations API key is invalid or expired.")
                 else:
                     error_text = await response.text()
                     print(f"❌ Generation Failed: Server returned status code {response.status}.")
                     print(f"Pollinations Server Error: {error_text}")
+
         except Exception as e:
             print(f"Image generation exception: {e}")
 
