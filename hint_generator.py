@@ -5,6 +5,8 @@ import discord
 import urllib
 import aiohttp
 import io
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.tag import pos_tag
 
 # import sys
 # sys.path.append('/usr/local/lib/python3.14/dist-packages')
@@ -37,11 +39,11 @@ def generate_cryptic_clue(task_text):
         return "OPERATION CLASSIFIED"
 
     # Focus on the first sentence for the core action verb
-    first_sent_tokens = [w for w in word_tokenize(sentences[0]) if w.isalpha() and len(w) > 1]
+    first_sent_tokens = [w for w in word_tokenize(sentences[0]) if w.isalpha() and len(w) > 1 and w != 've']
     first_sent_tags = pos_tag(first_sent_tokens)
 
     # Scan the whole text for descriptive nouns
-    all_tokens = [w for w in word_tokenize(clean_text) if w.isalpha() and len(w) > 1]
+    all_tokens = [w for w in word_tokenize(clean_text) if w.isalpha() and len(w) > 1 and w != 've']
     all_tags = pos_tag(all_tokens)
 
     # 4. Find the best Action (Verb)
@@ -68,98 +70,6 @@ def generate_cryptic_clue(task_text):
         noun = common_nouns[0].upper()
 
     return f"{verb} {noun}"
-
-
-def get_best_clue(task_text):
-    clean_text = re.sub(r'http\S+', '', task_text)
-    tokens = word_tokenize(clean_text)
-    tagged = pos_tag(tokens)
-    sentences = sent_tokenize(clean_text)
-
-    # ignore_list = {'you', 'must', 'have', 'want', 'need', 'task', 'mission', 'participant', 'sas', 'year', 'time',
-    #                'day', 'week'}
-
-    ignore_list = {
-        'you', 'must', 'have', 'want', 'need', 'task', 'mission',
-        'participant', 'sas', 'year', 'time', 'day', 'week', 'secret',
-        'agent', 'asai', 'bibler', 'hardy', 'hanifen', 'santa',
-        'peggy', 'mom', 'dad', 'david', 'kate', 'kyle', 'jenn', 'tommy',
-        'annie', 'justin', 'liz', 'eamonn'}
-    generic_nouns = {'someone', 'person', 'thing', 'one', 'place', 'everyone', 'anyone'}
-
-    # --- GENERATE CANDIDATES & EVALUATE STRENGTH ---
-    candidates = {}
-
-    # Strategy A: Proper Noun Target
-    proper_nouns = [w.upper() for w, t in tagged if t == 'NNP' and w.lower() not in ignore_list]
-    if proper_nouns:
-        candidates['TARGET'] = (f"TARGET ENTITY: {proper_nouns[0]}", 95)
-
-    # Strategy B: Headcount / Group Scale (NEW 🚀)
-    group_indicators = {'everyone', 'everybody', 'all', 'each', 'anybody', 'group', 'sisters', 'players'}
-    words_lower = [w.lower() for w in tokens]
-
-    found_headcount = False
-    # Check 1: Look for explicit numbers (e.g., "four people", "10 times")
-    for i, (word, tag) in enumerate(tagged):
-        if tag == 'CD' and i + 1 < len(tagged):
-            next_word, next_tag = tagged[i + 1]
-            if next_tag.startswith('NN') and next_word.lower() not in {'year', 'time', 'day', 'week'}:
-                candidates['HEADCOUNT'] = (f"TARGET SCALE: GROUPS OF {word.upper()} OR MORE", 92)
-                found_headcount = True
-                break
-
-    # Check 2: Look for blanket group pronouns (e.g., "everyone", "all the sisters")
-    if not found_headcount:
-        for word in words_lower:
-            if word in group_indicators:
-                if word in {'everyone', 'everybody', 'all'}:
-                    candidates['HEADCOUNT'] = (f"TARGET SCALE: THE ENTIRE ROOM / EVERYONE", 92)
-                else:
-                    candidates['HEADCOUNT'] = (f"TARGET SCALE: MULTIPLE SPECIFIC TARGETS", 88)
-                break
-
-    # Strategy C: Conditional Trigger
-    trigger_keywords = {'when', 'whenever', 'if', 'after', 'before', 'while'}
-    for kw in trigger_keywords:
-        if kw in words_lower:
-            idx = words_lower.index(kw)
-            phrase = tokens[idx:idx + 3]
-            candidates['TRIGGER'] = (f"TRIGGER WARNING: " + " ".join(phrase).upper(), 90)
-            break
-
-    # Strategy D: Physical Zone/Location
-    spatial_prepositions = {'in', 'at', 'into', 'to', 'inside', 'around', 'on'}
-    found_zone = False
-    for i, (word, tag) in enumerate(tagged):
-        if word.lower() in spatial_prepositions and i + 1 < len(tagged):
-            for j in range(i + 1, min(i + 4, len(tagged))):
-                next_word, next_tag = tagged[j]
-                if next_tag.startswith('NN') and next_word.lower() not in (ignore_list | generic_nouns):
-                    candidates['ZONE'] = (f"ZONE ALERT: THE {next_word.upper()}", 85)
-                    found_zone = True
-                    break
-            if found_zone: break
-
-    # Strategy E: Concrete Physical Prop
-    abstract_nouns = {'mission', 'year', 'time', 'day', 'week', 'participant', 'sas', 'company', 'content', 'times',
-                      'everyone', 'person', 'someone'}
-    common_nouns = [w.upper() for w, t in tagged if
-                    t.startswith('NN') and w.lower() not in (ignore_list | abstract_nouns | generic_nouns)]
-    if common_nouns:
-        candidates['PROP'] = (f"PROP DEPLOYMENT: {common_nouns[0]}", 80)
-
-    # Strategy F: Fallback Word-Based Combo
-    weak_verbs = {'is', 'are', 'was', 'were', 'be', 'have', 'must', 'do'}
-    verb = next((w.upper() for w, t in pos_tag(word_tokenize(sentences[0])) if
-                 t.startswith('VB') and w.lower() not in weak_verbs), "OPERATION")
-    noun = common_nouns[0] if common_nouns else "OBJECTIVE"
-    candidates['WORD_COMBO'] = (f"OPERATION: {verb} {noun}", 60)
-
-    # --- PICK THE WINNER ---
-    sorted_candidates = sorted(candidates.items(), key=lambda item: item[1][1], reverse=True)
-    return sorted_candidates[0][1][0]
-
 
 def distill_task_sentence(task_text):
     """
@@ -214,110 +124,6 @@ def distill_task_sentence(task_text):
     sorted_sentences = sorted(sentence_scores.items(), key=lambda item: item[1], reverse=True)
     return sorted_sentences[0][0].strip()
 
-
-import re
-import nltk
-from nltk.tokenize import word_tokenize, sent_tokenize
-from nltk.tag import pos_tag
-
-# Ensure downloads are ready for the VM
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-
-
-def generate_dynamic_clue(task_text, level=2):
-    """
-    Generates information-shifting clues with strictly unique words.
-    Level 2 = 2 words (Noun 1 + Noun 2) - Zero action context.
-    Level 3 = 3 words (Verb + Noun 1 + Noun 2) - Adds the action.
-    Level 4 = 4 words (Verb + Noun 1 + Noun 2 + Modifier) - Adds a descriptive detail.
-    """
-    # 1. Clean out URLs
-    clean_text = re.sub(r'http\S+', '', task_text)
-
-    # 2. Setup ignore lists
-    ignore_list = {
-        'you', 'must', 'have', 'want', 'need', 'task', 'mission',
-        'participant', 'sas', 'year', 'time', 'day', 'week', 'secret',
-        'agent', 'asai', 'bibler', 'hardy', 'hanifen', 'santa',
-        'peggy', 'mom', 'dad', 'david', 'kate', 'kyle', 'jenn', 'tommy',
-        'annie', 'justin', 'liz', 'eamonn', 'least', 'ceremony', 'presentation',
-        'youve'
-    }
-    generic_nouns = {'someone', 'person', 'thing', 'one', 'place', 'everyone', 'anyone'}
-
-    # 3. Tokenize and Tag everything
-    sentences = sent_tokenize(clean_text)
-    if not sentences:
-        return "CLASSIFIED OBJECTIVE"
-
-    first_sent_tags = pos_tag(word_tokenize(sentences[0]))
-    all_tags = pos_tag(word_tokenize(clean_text))
-
-    # Track used words (in lowercase) to enforce strict uniqueness
-    used_words = set()
-
-    # 4. Extract Verb (Action) from the first sentence
-    weak_verbs = {'is', 'are', 'was', 'were', 'be', 'been', 'do', 'does', 'did', 'have', 'has', 'had', 'runs'}
-    verb = "OPERATION"
-    for word, tag in first_sent_tags:
-        if tag.startswith('VB') and word.lower() not in weak_verbs and word.lower() not in ignore_list:
-            verb = word.upper()
-            used_words.add(word.lower())
-            used_words.add(word.lower().rstrip('s').rstrip('ing'))
-            break
-
-    # 5. Extract Nouns (Targets)
-    proper_nouns = [w.upper() for w, t in all_tags if t == 'NNP' and w.lower() not in ignore_list]
-    common_nouns = [w.upper() for w, t in all_tags if
-                    t.startswith('NN') and w.lower() not in ignore_list and w.lower() not in generic_nouns]
-
-    # Consolidate raw noun list, putting unique Proper Nouns first
-    raw_nouns = proper_nouns + [n for n in common_nouns if n not in proper_nouns]
-
-    # Clean and deduplicate nouns against used words and each other
-    final_nouns = []
-    for noun in raw_nouns:
-        noun_lower = noun.lower()
-        noun_root = noun_lower.rstrip('s')
-
-        if (noun_lower not in used_words) and (noun_root not in used_words):
-            final_nouns.append(noun)
-            used_words.add(noun_lower)
-            used_words.add(noun_root)
-
-    # Ensure we have at least two unique nouns to work with (fallbacks)
-    fallbacks = ["CLASSIFIED", "OBJECTIVE", "TARGET", "SECTOR"]
-    for fallback in fallbacks:
-        if len(final_nouns) >= 2:
-            break
-        if fallback.lower() not in used_words:
-            final_nouns.append(fallback)
-            used_words.add(fallback.lower())
-
-    # 6. Extract Modifiers (Adjectives/Adverbs)
-    modifiers = [w.upper() for w, t in all_tags if t.startswith('JJ') or t.startswith('RB')]
-
-    # Find a unique modifier
-    modifier = "SPECIFIC"
-    for mod in modifiers:
-        mod_lower = mod.lower()
-        if mod_lower not in ignore_list and mod_lower not in used_words:
-            modifier = mod
-            break
-
-    # 7. Level Separation Logic
-    if level == 2:
-        # Cryptic: Just the primary two unique nouns
-        return f"{final_nouns[0]} {final_nouns[1]}"
-
-    elif level == 4:
-        # Easy: Verb + Noun 1 + Noun 2 + Descriptive Modifier
-        return f"{verb} {final_nouns[0]} {final_nouns[1]} {modifier}"
-
-    else:
-        # Medium (Level 3): Verb + Noun 1 + Noun 2
-        return f"{verb} {final_nouns[0]} {final_nouns[1]}"
 
 async def generate_mission_image(prompt_text: str) -> discord.File:
     """
