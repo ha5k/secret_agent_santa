@@ -97,7 +97,7 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
         f"?width=1024"
         f"&height=1024"
         f"&nologo=true"
-        f"&model=flux"
+        f"&model=zimage"
         f"&key={api_key}"
     )
 
