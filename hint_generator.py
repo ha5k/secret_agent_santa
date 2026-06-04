@@ -86,9 +86,9 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
 
     encoded_prompt = "I'm going to share a description for a secret task that someone in my family is trying to " \
                      "accomplish. Generate an image of of a hint for this task that doesn't give away too many details " \
-                     "but is also cartoonish and " \
-                     "Christmas themed. Do not generate any text in the image." \
-                     "\nThe secret task is: \n" + encoded_prompt
+                     "but is also cartoonish, clean, and " \
+                     "Christmas themed." \
+                     "\nThe secret task is: \n" + encoded_prompt.strip("\"")
 
     # 2. Construct the corrected URL targeting the NEW unified endpoint.
     # Note: We pass the key as a URL parameter, along with width, height, and model choice.
