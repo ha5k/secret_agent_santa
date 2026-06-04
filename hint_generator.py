@@ -39,18 +39,20 @@ def generate_cryptic_clue(task_text):
         return "OPERATION CLASSIFIED"
 
     # Focus on the first sentence for the core action verb
-    first_sent_tokens = [w for w in word_tokenize(sentences[0]) if w.isalpha() and len(w) > 1 and w != 've']
+    first_sent_tokens = [w for w in word_tokenize(sentences[0]) if w.isalpha()
+                         and len(w) > 1 and w.lower() != 've']
     first_sent_tags = pos_tag(first_sent_tokens)
 
     # Scan the whole text for descriptive nouns
-    all_tokens = [w for w in word_tokenize(clean_text) if w.isalpha() and len(w) > 1 and w != 've']
+    all_tokens = [w for w in word_tokenize(clean_text) if w.isalpha()
+                  and len(w) > 1 and w.lower() != 've']
     all_tags = pos_tag(all_tokens)
 
     # 4. Find the best Action (Verb)
     # We skip weak "state of being/possession" verbs like is, are, have, do
     weak_verbs = {'is', 'are', 'was', 'were', 'be', 'been', 'do', 'does', 'did', 'have', 'has', 'had'}
     verb = "OPERATION"
-    for word, tag in first_sent_tags:
+    for word, tag in all_tags:
         if tag.startswith('VB') and word.lower() not in weak_verbs:
             verb = word.upper()
             break
