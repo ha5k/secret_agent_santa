@@ -71,60 +71,6 @@ def generate_cryptic_clue(task_text):
 
     return f"{verb} {noun}"
 
-def distill_task_sentence(task_text):
-    """
-    Analyzes a multi-sentence task and returns the single sentence
-    that best captures the core objective.
-    """
-    sentences = sent_tokenize(task_text)
-
-    # If it's already only one sentence, just return it
-    if len(sentences) <= 1:
-        return task_text.strip()
-
-    sentence_scores = {}
-
-    for index, sentence in enumerate(sentences):
-        score = 0
-        tokens = word_tokenize(sentence.lower())
-        tagged = pos_tag(word_tokenize(sentence))
-
-        # 1. Action weight: Does it start or contain a strong imperative verb?
-        # Core game actions (Bring, Hide, Order, Steal) give high value
-        weak_verbs = {'is', 'are', 'was', 'were', 'be', 'have', 'must', 'do', 'need', 'want'}
-        for word, tag in tagged:
-            if tag.startswith('VB') and word.lower() not in weak_verbs:
-                score += 15
-
-        # 2. Target weight: Does it mention critical nouns or pronouns?
-        # Sentences mentioning "everyone", "sisters", or specific objects are important
-        group_indicators = {'everyone', 'everybody', 'all', 'each', 'sisters', 'players', 'participant'}
-        for token in tokens:
-            if token in group_indicators:
-                score += 10
-
-        # 3. Object weight: Number of nouns (more nouns usually means more task details)
-        noun_count = len([w for w, t in tagged if t.startswith('NN')])
-        score += (noun_count * 2)
-
-        # 4. Position Bias: The first sentence is traditionally the "hook" or summary sentence
-        if index == 0:
-            score += 20
-
-        # 5. Negative Bias: Sentences dealing with "meta" constraints like links,
-        # photo proof, or scheduling add less value to the core summary.
-        meta_words = {'submit', 'http', 'picture', 'photo', 'link', 'video', 'proof', 'pool', 'prize'}
-        for token in tokens:
-            if token in meta_words:
-                score -= 25
-
-        sentence_scores[sentence] = score
-
-    # Sort sentences by score and return the highest-ranking one
-    sorted_sentences = sorted(sentence_scores.items(), key=lambda item: item[1], reverse=True)
-    return sorted_sentences[0][0].strip()
-
-
 async def generate_mission_image(prompt_text: str) -> discord.File:
     """
     Takes a string prompt, fetches an AI-generated image from Pollinations.ai,
@@ -139,8 +85,10 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
     encoded_prompt = urllib.parse.quote(prompt_text)
 
     encoded_prompt = "I'm going to share a description for a secret task that someone in my family is trying to " \
-                     "accomplish. Generate an image of this task that doesn't give away too many details but is also " \
-                     "Christmas themed. Do not generate any text in the image itself.\nThe secret task is: \n" + encoded_prompt
+                     "accomplish. Generate an image of of a hint for this task that doesn't give away too many details " \
+                     "but is also cartoonish and " \
+                     "Christmas themed. Do not generate any text in the image." \
+                     "\nThe secret task is: \n" + encoded_prompt
 
     # 2. Construct the corrected URL targeting the NEW unified endpoint.
     # Note: We pass the key as a URL parameter, along with width, height, and model choice.
@@ -149,7 +97,7 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
         f"?width=1024"
         f"&height=1024"
         f"&nologo=true"
-        # f"&model=flux"
+        f"&model=flux"
         f"&key={api_key}"
     )
 
@@ -201,7 +149,7 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
 #                     "role": "system",
 #                     "content": "You are a helpful game assistant. The user will give you a task. "
 #                                "Your job is to generate a relevant clue that is EXACTLY two words long. "
-#                                "The clue should ideally be a pun about about the task or christmas without giving too much away"
+#                                "The clue should be a Christmas pun  about the task without giving too much away"
 #                                "Do not include periods, explanations, or introductory text. Just two words."
 #                 },
 #                 {
