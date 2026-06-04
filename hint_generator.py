@@ -84,10 +84,7 @@ async def generate_mission_image(prompt_text: str) -> discord.File:
     # 1. Clean and encode the text string to be safe for a URL path
     encoded_prompt = urllib.parse.quote(prompt_text)
 
-    encoded_prompt = "I'm going to share a description for a secret task that someone in my family is trying to " \
-                     "accomplish. Generate an image of of a hint for this task that doesn't give away too many details " \
-                     "but is also cartoonish, clean, and " \
-                     "Christmas themed." \
+    encoded_prompt = "Generate an cartoonish image of of Santa Claus dressed in black and doing the secret task below" \
                      "\nThe secret task is: \n" + encoded_prompt.strip("\"")
 
     # 2. Construct the corrected URL targeting the NEW unified endpoint.
