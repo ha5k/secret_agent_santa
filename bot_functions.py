@@ -219,6 +219,7 @@ async def finalize_route_selection(bot, ctx, user_id: int, chosen_route_id: int 
     # 3. Lock it into the database structures
     bot.family[user_id].tasks.append(chosen_route_id)
     bot.missions[chosen_route_id].selected = True
+    bot.missins[chosen_route_id].route_active = True
     await asyncio.to_thread(save_mission_to_db, chosen_route_id, bot.missions[chosen_route_id])
 
     # 4. Release the remaining choices back into the general pool

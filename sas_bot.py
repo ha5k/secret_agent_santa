@@ -818,6 +818,7 @@ async def select(ctx):
         bot.family[user_id].tasks.append(task_id)
         bot.missions[task_id].selected = True
         bot.missions[task_id].hold_for = None
+        bot.missions[task_id].task_active = True
         # Update the database
         await ctx.author.send("Cool. You're locked in. Good Luck!")
         await asyncio.to_thread(save_player_to_db, user_id, bot.family[user_id])
@@ -864,7 +865,7 @@ async def draw(ctx, draw_what=''):
     if draw_what.lower() not in ['route', 'routes', '']:
         print("Unclear Draw Request")
         return await ctx.author.send("I'm not sure what you're trying to draw." +
-                                     "This is really only good for route cards")
+                                     "This is really only good for route cards.\n Enter \"!draw routes\" to retry!")
     if bot.family[user_id].is_agent:
         return await ctx.author.send("The agent can't draw route cards. You have enough to worry about")
 
