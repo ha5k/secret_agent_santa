@@ -869,6 +869,14 @@ async def draw(ctx, draw_what=''):
     if bot.family[user_id].is_agent:
         return await ctx.author.send("The agent can't draw route cards. You have enough to worry about")
 
+    active_routes = [k for k in bot.family[user_id].tasks  # all the user's tasks
+                     if bot.missions[k].route_active and   # if they are active routes
+                     not bot.missions[k].is_complete]      # and not complete
+    if active_routes:
+        print("User is trying to draw routes, but has incomplete routes")
+        return await ctx.author.send("You have incomplete route cards drawn, so you can't draw more. "
+                                     "Use \"!view\" to see your routes, and \"!complete\" to submit a completion")
+
     print("You are about to go into pending tasks")
     # if len(bot.family[ctx.author.id].pending_routes) > 0:
     list_held = await asyncio.to_thread(get_all_held_tasks, int(user_id))
@@ -965,7 +973,6 @@ async def complete(ctx):
     """Prove to Agent that route is complete. Get hint"""
     user_id = ctx.author.id
 
-
     if user_id not in bot.family:
         return await ctx.author.send("You aren't registered in the game!")
 
@@ -1020,7 +1027,6 @@ async def complete(ctx):
             except Exception as e:
                 await ctx.send("❌ A critical system error occurred while caching the image data.")
                 print(f"Image Save Exception: {e}")
-
 
     if not bot.game.route_confirms:  # If the agent isn't confirming route cards
         print("Route confirms not active. Generating hint")
