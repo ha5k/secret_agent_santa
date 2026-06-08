@@ -1263,9 +1263,10 @@ async def journal(ctx, *, entry_text=""):
 @commands.dm_only()
 @is_the_manager()
 async def check_selections(ctx):
-    role = discord.utils.get(ctx.guild.roles, name="sas_manager")
-    if not role or role not in ctx.author.roles:
-        return await ctx.channel.send("Only a SAS Manager can use this command.")
+    ## I don't think this works!!!
+    # role = discord.utils.get(ctx.guild.roles, name="sas_manager")
+    # if not role or role not in ctx.author.roles:
+    #     return await ctx.channel.send("Only a SAS Manager can use this command.")
 
     msg = "Here's the readout"
     for n in bot.family:
@@ -1284,10 +1285,11 @@ async def check_selections(ctx):
 async def pester(ctx, *, reminder_text=""):
     """Allows a SAS Manager to broadcast an official reminder to the main game channel"""
 
-    # 1. Authority Validation Check
-    role = discord.utils.get(ctx.guild.roles, name="sas_manager")
-    if not role or role not in ctx.author.roles:
-        return await ctx.channel.send("Only a SAS Manager can use this command.")
+    ## I don't think this works!
+    # # 1. Authority Validation Check
+    # role = discord.utils.get(ctx.guild.roles, name="sas_manager")
+    # if not role or role not in ctx.author.roles:
+    #     return await ctx.channel.send("Only a SAS Manager can use this command.")
 
     if bot.game is None:
         return await ctx.channel.send("There is no active game configuration loaded!")
