@@ -1267,14 +1267,16 @@ async def check_selections(ctx):
     # role = discord.utils.get(ctx.guild.roles, name="sas_manager")
     # if not role or role not in ctx.author.roles:
     #     return await ctx.channel.send("Only a SAS Manager can use this command.")
-
+    print("Checking the Selections for the game")
     msg = "Here's the readout"
     for n in bot.family:
+        print("Checking", bot.family[n].name)
         name = bot.family[n].name
         selection_len = len(bot.family[n].selections)
         tasks_count = len([k for k in bot.family[n].selections if bot.missions[k].task_eligible])
         route_count = len([k for k in bot.family[n].selections if bot.missions[k].route_eligible])
         msg += f"\n- {name}: {task_count} of {selection_len} are tasks. {route_count} are routes"
+    print(msg)
     await ctx.author.send(msg)
         
 
