@@ -1523,7 +1523,7 @@ async def status_check(ctx):
         name = bot.family[n].name
         task_count = len([k for k in bot.family[n].submissions if bot.missions[k].task_eligible])
         needs_tasks = 3 if bot.family[n].playing else 0
-        selected_count = len([k for k in bot.family[n].tasks if bot.missions[k].task_eligible])
+        selected_count = min(len([k for k in bot.family[n].tasks]), 1)
         if bot.family[n].playing:
             msg += f"\n- {name}: {task_count}/{needs_tasks} submitted. {selected_count} tasks selected."
         else:
