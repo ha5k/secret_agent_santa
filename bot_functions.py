@@ -49,7 +49,8 @@ async def shuffle_tasks(bot, tasks_to_assign = 3):
                 while len(bot.family[f].selections) < tasks_to_assign:
                     print(f'Assigning tasks for {f}')
                     tasks = [m for m in bot.missions if ((m not in pending_tasks) and
-                                                         (bot.missions[m].submitter != f))]
+                                                         (bot.missions[m].submitter != f) and
+                                                         (bot.missions[m].task_eligible))]
                     shuffle(tasks)
                     if len(tasks) == 0:  # You're out of options for tasks
                         shuffles_good = False
