@@ -1278,7 +1278,7 @@ async def check_selections(ctx):
         tasks_count = len([k for k in bot.family[n].selections if bot.missions[k].task_eligible])
         route_count = len([k for k in bot.family[n].selections if bot.missions[k].route_eligible])
         print('\tAppending tasks')
-        msg += f"\n- {name}: {task_count} of {selection_len} are tasks. {route_count} are routes"
+        print(f"\n- {name}: {task_count} of {selection_len} are tasks. {route_count} are routes")
     print(msg)
     await ctx.author.send(msg)
         
