@@ -1259,6 +1259,24 @@ async def journal(ctx, *, entry_text=""):
         print(f"[ERROR] Failed writing to journal.txt: {e}")
         await ctx.author.send("❌ Ah, sorry! An unexpected database write failure happened. Let the manager know.")
 
+@bot.command()
+@commands.dm_only()
+@is_the_manager()
+async def check_selections(ctx):
+    role = discord.utils.get(ctx.guild.roles, name="sas_manager")
+    if not role or role not in ctx.author.roles:
+        return await ctx.channel.send("Only a SAS Manager can use this command.")
+
+    msg = "Here's the readout"
+    for n in bot.family:
+        name = bot.family[n].name
+        selection_len = len(bot.family[n].selections)
+        tasks_count = len([k for k in bot.family[n].selections if bot.missions[k].task_eligible])
+        route_count = len([k for k in bot.family[n].selections if bot.missions[k].route_eligible])
+        msg += f"\n- {name}: {task_count} of {selection_len} are tasks. {route_count} are routes"
+    await ctx.author.send(msg)
+        
+
 
 @bot.command()
 @commands.dm_only()
