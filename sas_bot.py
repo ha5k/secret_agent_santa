@@ -1272,7 +1272,7 @@ async def check_selections(ctx):
     for n in bot.family:
         print("Checking", bot.family[n].name)
         name = bot.family[n].name
-        print('\tChecking selections'}
+        print('\tChecking selections')
         selection_len = len(bot.family[n].selections)
         print('\tChecking eligibility')
         tasks_count = len([k for k in bot.family[n].selections if bot.missions[k].task_eligible])
