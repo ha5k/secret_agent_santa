@@ -874,7 +874,8 @@ async def draw(ctx, draw_what=''):
                      not bot.missions[k].is_complete]      # and not complete
     if active_routes:
         print("User is trying to draw routes, but has incomplete routes")
-        return await ctx.author.send("You have incomplete route cards drawn, so you can't draw more. "
+        return await ctx.author.send("You have incomplete route cards drawn, or an incomplete route, "
+                                     "so you can't draw more. "
                                      "Use \"!view\" to see your routes, and \"!complete\" to submit a completion")
 
     print("You are about to go into pending tasks")
@@ -1529,6 +1530,8 @@ async def status_check(ctx):
             msg += f"\n- {name} is registered, but not playing"
 
     await ctx.channel.send(msg)
+
+
 
 @bot.command()
 @commands.has_role("sas_manager")
