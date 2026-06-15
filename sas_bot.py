@@ -1260,6 +1260,30 @@ async def journal(ctx, *, entry_text=""):
         print(f"[ERROR] Failed writing to journal.txt: {e}")
         await ctx.author.send("❌ Ah, sorry! An unexpected database write failure happened. Let the manager know.")
 
+@bot.command()
+@commands.dm_only()
+@is_the_manager()
+async def check_selections(ctx):
+    ## I don't think this works!!!
+    # role = discord.utils.get(ctx.guild.roles, name="sas_manager")
+    # if not role or role not in ctx.author.roles:
+    #     return await ctx.channel.send("Only a SAS Manager can use this command.")
+    print("Checking the Selections for the game")
+    msg = "Here's the readout"
+    for n in bot.family:
+        print("Checking", bot.family[n].name)
+        name = bot.family[n].name
+        print('\tChecking selections')
+        selection_len = len(bot.family[n].selections)
+        print('\tChecking eligibility')
+        tasks_count = len([k for k in bot.family[n].selections if bot.missions[k].task_eligible])
+        route_count = len([k for k in bot.family[n].selections if bot.missions[k].route_eligible])
+        print('\tAppending tasks')
+        msg += f"\n- {name}: {tasks_count} of {selection_len} are tasks. {route_count} are routes"
+    print(msg)
+    await ctx.author.send(msg)
+        
+
 
 @bot.command()
 @commands.dm_only()
@@ -1267,10 +1291,11 @@ async def journal(ctx, *, entry_text=""):
 async def pester(ctx, *, reminder_text=""):
     """Allows a SAS Manager to broadcast an official reminder to the main game channel"""
 
-    # 1. Authority Validation Check
-    role = discord.utils.get(ctx.guild.roles, name="sas_manager")
-    if not role or role not in ctx.author.roles:
-        return await ctx.channel.send("Only a SAS Manager can use this command.")
+    ## I don't think this works!
+    # # 1. Authority Validation Check
+    # role = discord.utils.get(ctx.guild.roles, name="sas_manager")
+    # if not role or role not in ctx.author.roles:
+    #     return await ctx.channel.send("Only a SAS Manager can use this command.")
 
     if bot.game is None:
         return await ctx.channel.send("There is no active game configuration loaded!")
@@ -1524,8 +1549,9 @@ async def status_check(ctx):
         name = bot.family[n].name
         task_count = len([k for k in bot.family[n].submissions if bot.missions[k].task_eligible])
         needs_tasks = 3 if bot.family[n].playing else 0
+        selected_count = min(len([k for k in bot.family[n].tasks]), 1)
         if bot.family[n].playing:
-            msg += f"\n- {name}: {task_count}/{needs_tasks} submitted"
+            msg += f"\n- {name}: {task_count}/{needs_tasks} submitted. {selected_count} tasks selected."
         else:
             msg += f"\n- {name} is registered, but not playing"
 
