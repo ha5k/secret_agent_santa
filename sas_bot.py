@@ -1556,34 +1556,34 @@ async def status_check(ctx):
             msg += f"\n- {name} is registered, but not playing"
 
     await ctx.channel.send(msg)
-
-@bot.command()
-@commands.dm_only()
-async def fix_game(ctx):
-    """Eamonn's fix to the route card bug... again"""
-
-    sas = None
-    for n in bot.family:
-        if bot.family[n].is_agent:
-            print("Found Agent")
-            sas = n
-            break
-
-    for n in bot.family:
-        for t in bot.family[n].selections:
-            if not bot.missions[t].task_eligible:
-                bot.missions[t].task_eligible = True
-                print(f"Updated task {t}")
-                if t in bot.family[n].tasks and t not in bot.family[sas].tasks:
-                    bot.family[sas].tasks.append(t)
-                    bot.missions[t].task_active = True
-                    bot.missions[t].route_active = False
-            await asyncio.to_thread(save_mission_to_db, t, bot.missions[t])
-
-    await asyncio.to_thread(save_player_to_db, sas, bot.family[sas])
-
-    await ctx.author.send("You did it... I think")
-
+# #
+# @bot.command()
+# @commands.dm_only()
+# async def fix_game(ctx):
+#     """Eamonn's fix to the route card bug... again"""
+#
+#     sas = None
+#     for n in bot.family:
+#         if bot.family[n].is_agent:
+#             print("Found Agent")
+#             sas = n
+#             break
+#
+#     for n in bot.family:
+#         for t in bot.family[n].selections:
+#             if not bot.missions[t].task_eligible:
+#                 bot.missions[t].task_eligible = True
+#                 print(f"Updated task {t}")
+#                 if t in bot.family[n].tasks and t not in bot.family[sas].tasks:
+#                     bot.family[sas].tasks.append(t)
+#                     bot.missions[t].task_active = True
+#                     bot.missions[t].route_active = False
+#             await asyncio.to_thread(save_mission_to_db, t, bot.missions[t])
+#
+#     await asyncio.to_thread(save_player_to_db, sas, bot.family[sas])
+#
+#     await ctx.author.send("You did it... I think")
+#
 
 
 
