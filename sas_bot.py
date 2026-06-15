@@ -1560,7 +1560,7 @@ async def status_check(ctx):
 @bot.commant()
 @commands.dm_only()
 async def fix_game(ctx):
-    """Eamonn's fix to the route card bug"""
+    """Eamonn's fix to the route card bug... again"""
 
     sas = None
     for n in bot.family:
