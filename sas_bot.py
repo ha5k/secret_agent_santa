@@ -1557,7 +1557,7 @@ async def status_check(ctx):
 
     await ctx.channel.send(msg)
 
-@bot.commant()
+@bot.command()
 @commands.dm_only()
 async def fix_game(ctx):
     """Eamonn's fix to the route card bug... again"""
