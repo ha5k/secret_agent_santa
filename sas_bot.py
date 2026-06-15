@@ -1552,9 +1552,9 @@ async def fix_game(ctx):
                     bot.family[sas].tasks.append(t)
                     bot.missions[t].task_active = True
                     bot.missions[t].route_active = False
-                await asyncio.to_thread(save_mission_to_db, t, bot.missions[t])
+            await asyncio.to_thread(save_mission_to_db, t, bot.missions[t])
 
-        await asyncio.to_thread(save_player_to_db, sas, bot.family[sas])
+    await asyncio.to_thread(save_player_to_db, sas, bot.family[sas])
 
     await ctx.author.send("You did it... I think")
 
